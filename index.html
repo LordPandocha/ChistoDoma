@@ -369,20 +369,24 @@ body.tg-mini .lead-status.err{
 <footer>© Чисто Дома · Нефтеюганск · <a href="https://instagram.com/chisto_doma_nft" target="_blank" rel="noopener">Instagram</a> · <a href="https://vk.ru/chisto_doma_nft" target="_blank" rel="noopener">ВКонтакте</a></footer>
 <script>
 (function(){
-  try{
-    var tg = window.Telegram && window.Telegram.WebApp;
-    if(!tg) return;
-    document.documentElement.classList.add('tg-mini');
-    document.body && document.body.classList.add('tg-mini');
-    tg.ready();
-    tg.expand();
-    if(tg.setHeaderColor){
-      tg.setHeaderColor(tg.themeParams && tg.themeParams.bg_color ? tg.themeParams.bg_color : '#f3f8ff');
-    }
-    if(tg.setBackgroundColor){
-      tg.setBackgroundColor(tg.themeParams && tg.themeParams.bg_color ? tg.themeParams.bg_color : '#f3f8ff');
-    }
-  }catch(e){}
+  function initTelegramMiniApp(){
+    try{
+      var tg = window.Telegram && window.Telegram.WebApp;
+      if(!tg) return;
+      document.documentElement.classList.add('tg-mini');
+      if(document.body) document.body.classList.add('tg-mini');
+      tg.ready();
+      tg.expand();
+      if(tg.setHeaderColor){
+        tg.setHeaderColor(tg.themeParams && tg.themeParams.bg_color ? tg.themeParams.bg_color : '#f3f8ff');
+      }
+      if(tg.setBackgroundColor){
+        tg.setBackgroundColor(tg.themeParams && tg.themeParams.bg_color ? tg.themeParams.bg_color : '#f3f8ff');
+      }
+    }catch(e){}
+  }
+  if(document.body) initTelegramMiniApp();
+  else document.addEventListener('DOMContentLoaded', initTelegramMiniApp);
 })();
 </script>
 <script>
