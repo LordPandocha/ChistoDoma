@@ -344,7 +344,19 @@ form.addEventListener('submit',async function(e){
     if(!res.ok)throw new Error('send');
     form.reset();preview.classList.remove('on');showStatus('✅ Заявка отправлена. Мы свяжемся с вами по указанному номеру.','ok');
   }catch(err){
-    showStatus('⚠️ Форма готова, но сервер отправки ещё не подключён. Укажите адрес Telegram API в TELEGRAM_ENDPOINT.','err');
+    var msg='⚠️ Не удалось отправить заявку.';
+    if(err && err.message==='send' && typeof res!=='undefined'){
+      try{
+        var details=await res.clone().json();
+        if(details && details.telegram_error) msg+=' Telegram: '+details.telegram_error;
+        else if(details && details.error) msg+=' '+details.error;
+      }catch(_e){}
+    }else if(err && err.message==='endpoint'){
+      msg+=' Неверный адрес API.';
+    }else if(err && err.message){
+      msg+=' '+err.message;
+    }
+    showStatus(msg,'err');
   }finally{btn.disabled=false;btn.textContent='Отправить заявку';}
 });
 </script>
