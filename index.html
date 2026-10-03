@@ -131,6 +131,9 @@ footer{padding:24px 0 90px;background:#020a1a;color:#8ea4c6;font-size:12px}.foot
 .trust-point b{display:block;margin-bottom:4px}.trust-point span{color:var(--mut);font-size:12px;line-height:1.45}
 @media(max-width:940px){.trust-row{grid-template-columns:1fr}.trust-points{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:640px){.trust-score{padding:20px;gap:14px}.trust-score strong{font-size:48px}.trust-points{grid-template-columns:1fr}}
+
+.review-stars{display:flex;gap:3px;margin:0 0 10px;line-height:1}
+.review-stars span{font-size:17px;font-weight:900;background:linear-gradient(135deg,#55e9ff 0%,#2a8cff 55%,#72a8ff 100%);-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:0 0 18px rgba(42,140,255,.18)}
 </style>
 <script>
 (function(){
@@ -357,6 +360,7 @@ if(reviewGrid){
          </div>
          <div class="review-badge">✓ Сделка · Авито</div>
        </div>
+       <div class="review-stars" aria-label="5 из 5 звёзд"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
        <p class="review-text">${r.text}</p>
        <div class="review-footer"><span>${r.service}</span><span>Чисто Дома</span></div>
      </article>`).join('');
