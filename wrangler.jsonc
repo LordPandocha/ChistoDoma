@@ -1,0 +1,6 @@
+{
+  "$schema": "https://developers.cloudflare.com/workers/wrangler/config-schema.json",
+  "name": "chisto-doma-telegram-api",
+  "main": "telegram-worker/index.js",
+  "compatibility_date": "2026-10-03"
+}
