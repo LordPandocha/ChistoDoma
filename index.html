@@ -295,7 +295,7 @@ var PRICES=[
   {n:'Угловой диван',p:3800,f:1,t:'ориентир',d:1},
   {n:'Матрас',p:2100,f:1,t:'ориентир',d:1}
 ];
-var TELEGRAM_ENDPOINT='/api/lead';
+var TELEGRAM_ENDPOINT='https://chistodoma.stolovka.workers.dev/api/lead';
 var cur=2,qty=PRICES[2].d;
 var ch=document.getElementById('chips');
 PRICES.forEach(function(x,i){var b=document.createElement('button');b.className='chip'+(i===cur?' on':'');b.textContent=x.n;b.type='button';b.onclick=function(){cur=i;qty=x.d;[].forEach.call(ch.children,function(c,j){c.classList.toggle('on',j===i)});up()};ch.appendChild(b)});
