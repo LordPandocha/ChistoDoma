@@ -49,7 +49,7 @@ async function sendMessage(env, chatId, text, replyMarkup) {
 const mainKeyboard = {
   inline_keyboard: [
     [
-      { text: "📸 Оставить заявку", callback_data: "application" },
+      { text: "📸 Оставить заявку", url: APPLICATION_URL },
       { text: "💰 Цены", callback_data: "prices" },
     ],
     [
@@ -151,6 +151,14 @@ async function handleTelegramUpdate(request, env) {
     const text = String(message.text || "").trim().toLowerCase();
 
     if (text.startsWith("/start") || text === "главное меню") {
+      await telegram(env, "setChatMenuButton", {
+        chat_id: chatId,
+        menu_button: {
+          type: "web_app",
+          text: "📋 Заявка",
+          web_app: { url: APPLICATION_URL },
+        },
+      });
       const name = message.from?.first_name || "друг";
       await sendMessage(
         env,
