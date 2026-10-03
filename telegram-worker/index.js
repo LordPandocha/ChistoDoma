@@ -1,6 +1,6 @@
 const ALLOWED_ORIGIN = "https://lordpandocha.github.io";
 const SITE_URL = "https://lordpandocha.github.io/ChistoDoma/";
-const APPLICATION_URL = "https://lordpandocha.github.io/ChistoDoma/#zayavka";
+const APPLICATION_URL = "https://lordpandocha.github.io/ChistoDoma/miniapp.html";
 
 function corsHeaders() {
   return {
