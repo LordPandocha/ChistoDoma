@@ -134,6 +134,44 @@ footer{padding:24px 0 90px;background:#020a1a;color:#8ea4c6;font-size:12px}.foot
 
 .review-stars{display:flex;gap:3px;margin:0 0 10px;line-height:1}
 .review-stars span{font-size:17px;font-weight:900;background:linear-gradient(135deg,#55e9ff 0%,#2a8cff 55%,#72a8ff 100%);-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:0 0 18px rgba(42,140,255,.18)}
+
+.reviews-source{
+  padding:13px 18px;
+  font-size:13px;
+  letter-spacing:.01em;
+  border-color:rgba(85,233,255,.24);
+  background:linear-gradient(135deg,rgba(85,233,255,.12),rgba(42,140,255,.16));
+  box-shadow:0 8px 28px rgba(42,140,255,.12);
+  transition:transform .2s,box-shadow .2s,border-color .2s,background .2s;
+}
+.reviews-source:hover{
+  transform:translateY(-2px);
+  border-color:rgba(85,233,255,.5);
+  background:linear-gradient(135deg,rgba(85,233,255,.18),rgba(42,140,255,.22));
+  box-shadow:0 12px 34px rgba(42,140,255,.2);
+}
+.hero h1{
+  text-shadow:0 0 28px rgba(42,140,255,.06);
+}
+.hero h1 span{
+  position:relative;
+  filter:drop-shadow(0 0 18px rgba(85,233,255,.10));
+}
+.hero h1 span:after{
+  content:"";
+  position:absolute;
+  left:2%;
+  right:18%;
+  bottom:-10px;
+  height:18px;
+  background:radial-gradient(ellipse at center,rgba(85,233,255,.14),transparent 72%);
+  filter:blur(7px);
+  pointer-events:none;
+  z-index:-1;
+}
+.hero-photo{
+  box-shadow:0 0 70px rgba(42,140,255,.18),0 0 24px rgba(85,233,255,.05);
+}
 </style>
 <script>
 (function(){
