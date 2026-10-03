@@ -98,7 +98,27 @@ footer{padding:24px 0 90px;background:#020a1a;color:#8ea4c6;font-size:12px}.foot
 .geo.c{width:84px;height:84px;left:72%;bottom:18%;clip-path:polygon(50% 0,100% 38%,72% 100%,18% 82%,0 32%);animation:geoC 11s ease-in-out infinite}
 .geo.d{width:56px;height:56px;left:18%;bottom:20%;border-radius:50%;box-shadow:0 0 35px rgba(82,220,255,.10);animation:geoD 8s ease-in-out infinite}
 .geo:after{content:"";position:absolute;inset:13%;border:1px solid rgba(130,232,255,.15);border-radius:inherit}
-@keyframes geoA{50%{transform:translate3d(26px,-22px,0) rotate(20deg)}}@keyframes geoB{50%{transform:translate3d(-24px,20px,0) rotate(-14deg)}}@keyframes geoC{50%{transform:translate3d(18px,-24px,0) rotate(18deg)}}@keyframes geoD{50%{transform:translate3d(30px,-8px,0)}}</style>
+@keyframes geoA{50%{transform:translate3d(26px,-22px,0) rotate(20deg)}}@keyframes geoB{50%{transform:translate3d(-24px,20px,0) rotate(-14deg)}}@keyframes geoC{50%{transform:translate3d(18px,-24px,0) rotate(18deg)}}@keyframes geoD{50%{transform:translate3d(30px,-8px,0)}}
+.reviews-section{background:linear-gradient(180deg,rgba(7,25,54,.35),rgba(3,13,31,.82))}
+.reviews-head{display:flex;align-items:end;justify-content:space-between;gap:24px;margin-bottom:28px}
+.reviews-source{display:inline-flex;align-items:center;gap:8px;padding:9px 12px;border:1px solid var(--line);border-radius:999px;background:rgba(255,255,255,.03);font-size:11px;font-weight:900;color:#bfe8ff}
+.reviews-source:hover{border-color:rgba(82,220,255,.5);color:#fff}
+.review-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.review-card{display:flex;flex-direction:column;padding:21px;border:1px solid var(--line);border-radius:22px;background:linear-gradient(145deg,rgba(10,31,64,.92),rgba(4,16,36,.94));box-shadow:0 18px 42px rgba(0,0,0,.16)}
+.review-top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:13px}
+.review-person{display:flex;align-items:center;gap:10px;min-width:0}
+.review-avatar{width:42px;height:42px;display:grid;place-items:center;flex:0 0 auto;border-radius:50%;background:linear-gradient(135deg,var(--cyan),var(--blue));color:#00102f;font-weight:950}
+.review-name{font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.review-date{font-size:11px;color:var(--mut);margin-top:2px}
+.review-badge{font-size:10px;font-weight:900;color:#79e7ff;white-space:nowrap}
+.review-text{color:#d7e7fb;font-size:14px;line-height:1.65;margin:0}
+.review-footer{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:auto;padding-top:16px;font-size:10px;color:var(--mut)}
+.review-more{display:flex;justify-content:center;margin-top:22px}
+.review-more button{border:1px solid var(--line);background:rgba(255,255,255,.03);color:#e8f4ff;border-radius:14px;padding:12px 16px;font-weight:900;cursor:pointer}
+.review-more button:hover{border-color:rgba(82,220,255,.45);background:rgba(255,255,255,.05)}
+@media(max-width:940px){.review-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:640px){.reviews-head{display:block}.reviews-source{margin-top:12px}.review-grid{grid-template-columns:1fr}.review-card{padding:18px}}
+</style>
 <script>
 (function(){
   try{
@@ -203,6 +223,17 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <article class="compare reveal" style="--delay:160ms"><div class="layer after" style="background-image:url('assets/after-sofa.jpg')"></div><div class="layer before" style="background-image:url('assets/before-sofa.jpg')"></div><div class="divider"></div><div class="handle">↔</div><div class="labels"><span>ДО</span><span>ПОСЛЕ</span></div><input type="range" min="0" max="100" value="52" aria-label="Диван-книжка"></article>
 </div></div></section>
 
+<section id="otzyvy" class="section reviews-section">
+<div class="wrap">
+<div class="reviews-head reveal">
+<div><div class="kicker">Отзывы клиентов</div><h2>Что говорят после химчистки.</h2><p style="margin:8px 0 0;color:var(--mut);max-width:650px">Отзывы размещены на основе клиентских отзывов на Авито. Здесь только отзывы, связанные с химчисткой мебели.</p></div>
+<a class="reviews-source" href="https://www.avito.ru/user/a48b47d890ea3a857d486b04254535c5/profile/all/predlozheniya_uslug?id=8296352069&iid=8296352069&page_from=from_item_messenger&src=messenger&sellerId=a48b47d890ea3a857d486b04254535c5" target="_blank" rel="noopener">↗ Все отзывы на Авито</a>
+</div>
+<div id="reviewGrid" class="review-grid"></div>
+<div class="review-more"><button id="reviewMore" type="button">Показать ещё отзывы</button></div>
+</div>
+</section>
+
 <section class="section"><div class="wrap">
 <div class="head reveal"><div><div class="kicker">Почему мы</div><h2>Чистый результат начинается с нормального процесса.</h2></div></div>
 <div class="why">
@@ -280,6 +311,30 @@ const heroMedia=document.querySelector('.hero-transform-media');
 if(heroMedia){setupCompare(heroMedia,heroMedia.querySelector('.hero-range'),heroMedia.querySelector('.hero-before'),heroMedia.querySelector('.hero-divider'),heroMedia.querySelector('.hero-handle'))}
 const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('on');io.unobserve(e.target)}}),{threshold:.12,rootMargin:'0px 0px -30px 0px'});
 document.querySelectorAll('.reveal').forEach(x=>io.observe(x));
+const reviewGrid=document.getElementById('reviewGrid'), reviewMore=document.getElementById('reviewMore');
+if(reviewGrid){
+ let reviewData=[], reviewShown=6;
+ const initials=n=>n.trim().split(/\s+/).slice(0,2).map(x=>x[0]).join('').toUpperCase();
+ const renderReviews=()=>{
+   reviewGrid.innerHTML=reviewData.slice(0,reviewShown).map((r,i)=>`
+     <article class="review-card reveal" style="--delay:${Math.min(i,5)*40}ms">
+       <div class="review-top">
+         <div class="review-person">
+           <div class="review-avatar">${initials(r.name)}</div>
+           <div><div class="review-name">${r.name}</div><div class="review-date">${r.date}</div></div>
+         </div>
+         <div class="review-badge">✓ Сделка · Авито</div>
+       </div>
+       <p class="review-text">${r.text}</p>
+       <div class="review-footer"><span>${r.service}</span><span>Чисто Дома</span></div>
+     </article>`).join('');
+   reviewGrid.querySelectorAll('.reveal').forEach(x=>io.observe(x));
+   if(reviewMore) reviewMore.style.display=reviewShown<reviewData.length?'inline-flex':'none';
+ };
+ fetch('reviews.json',{cache:'no-cache'}).then(r=>r.ok?r.json():Promise.reject(new Error('reviews load failed'))).then(data=>{reviewData=Array.isArray(data)?data:[];renderReviews()}).catch(()=>{if(reviewMore)reviewMore.style.display='none'});
+ if(reviewMore) reviewMore.addEventListener('click',()=>{reviewShown+=6;renderReviews()});
+}
+
 
 const typeGrid=document.getElementById('typeGrid'), typeSelect=document.getElementById('leadType');
 if(typeGrid&&typeSelect){
