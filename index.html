@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Чисто Дома — химчистка мебели в Нефтеюганске</title>
+<script src="https://telegram.org/js/telegram-web-app.js?63"></script>
 <meta name="description" content="Химчистка мебели в Нефтеюганске: диваны, кресла, стулья, матрасы. Выезд на дом. +7 912 088-30-29">
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=Unbounded:wght@500;700;800&display=swap" rel="stylesheet">
 <style>
@@ -172,6 +173,85 @@ a:focus-visible,button:focus-visible,input:focus-visible,summary:focus-visible{o
 .reveal{opacity:0;transform:translateY(18px);transition:opacity .6s ease,transform .6s cubic-bezier(.2,.7,.2,1)}.reveal.in{opacity:1;transform:none}
 @media (max-width:760px){.nav-cta{display:none}.price-strip{padding-bottom:2px}}
 @media (prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}}
+
+/* TELEGRAM MINI APP: only the application section */
+html.tg-mini, body.tg-mini{
+  background:#f3f8ff;
+}
+body.tg-mini{
+  min-height:100vh;
+  overflow-x:hidden;
+}
+body.tg-mini header,
+body.tg-mini footer,
+body.tg-mini main > *:not(#zayavka){
+  display:none !important;
+}
+body.tg-mini main{
+  padding:0 !important;
+  margin:0 !important;
+  min-height:100vh;
+}
+body.tg-mini #zayavka{
+  display:block !important;
+  min-height:100vh;
+  padding:
+    calc(18px + var(--tg-safe-area-inset-top, 0px))
+    12px
+    calc(28px + var(--tg-safe-area-inset-bottom, 0px));
+  background:var(--tg-theme-bg-color, #f3f8ff);
+}
+body.tg-mini #zayavka .w{
+  max-width:760px;
+  padding:0;
+}
+body.tg-mini .lead-wrap{
+  display:block;
+}
+body.tg-mini .lead-copy{
+  display:none;
+}
+body.tg-mini .lead-card{
+  width:100%;
+  max-width:720px;
+  margin:0 auto;
+  padding:22px;
+  border-radius:24px;
+  background:var(--tg-theme-secondary-bg-color, #fff);
+  box-shadow:0 14px 40px rgba(20,86,214,.12);
+  border:1px solid rgba(20,86,214,.10);
+}
+body.tg-mini .lead-card h3{
+  font-size:26px;
+  margin-bottom:6px;
+}
+body.tg-mini .lead-card .mini{
+  color:var(--tg-theme-hint-color, var(--mut));
+}
+body.tg-mini .lead-form input,
+body.tg-mini .lead-form textarea,
+body.tg-mini .lead-form select{
+  background:var(--tg-theme-bg-color, #f8fbff);
+  color:var(--tg-theme-text-color, var(--ink));
+}
+body.tg-mini .lead-form label{
+  color:var(--tg-theme-text-color, var(--deep));
+}
+body.tg-mini .privacy{
+  color:var(--tg-theme-hint-color, var(--mut));
+}
+body.tg-mini .btn{
+  width:100%;
+}
+body.tg-mini .lead-status.ok{
+  background:rgba(46,196,255,.12);
+  color:var(--tg-theme-text-color, #18734a);
+}
+body.tg-mini .lead-status.err{
+  background:rgba(255,80,80,.12);
+  color:var(--tg-theme-text-color, #9e3333);
+}
+
 </style>
 </head>
 <body>
@@ -287,6 +367,24 @@ a:focus-visible,button:focus-visible,input:focus-visible,summary:focus-visible{o
 <div class="cta"><a class="btn" href="#zayavka">📸 Отправить фото</a><a class="btn o" href="tel:+79120883029">+7 912 088-30-29</a><a class="btn o" href="https://instagram.com/chisto_doma_nft" target="_blank" rel="noopener">Instagram</a><a class="btn o" href="https://vk.ru/chisto_doma_nft" target="_blank" rel="noopener">ВКонтакте</a></div></div></section>
 </main>
 <footer>© Чисто Дома · Нефтеюганск · <a href="https://instagram.com/chisto_doma_nft" target="_blank" rel="noopener">Instagram</a> · <a href="https://vk.ru/chisto_doma_nft" target="_blank" rel="noopener">ВКонтакте</a></footer>
+<script>
+(function(){
+  try{
+    var tg = window.Telegram && window.Telegram.WebApp;
+    if(!tg) return;
+    document.documentElement.classList.add('tg-mini');
+    document.body && document.body.classList.add('tg-mini');
+    tg.ready();
+    tg.expand();
+    if(tg.setHeaderColor){
+      tg.setHeaderColor(tg.themeParams && tg.themeParams.bg_color ? tg.themeParams.bg_color : '#f3f8ff');
+    }
+    if(tg.setBackgroundColor){
+      tg.setBackgroundColor(tg.themeParams && tg.themeParams.bg_color ? tg.themeParams.bg_color : '#f3f8ff');
+    }
+  }catch(e){}
+})();
+</script>
 <script>
 var PRICES=[
   {n:'Стул',p:400,f:1,t:'ориентир',d:1},
