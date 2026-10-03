@@ -118,6 +118,19 @@ footer{padding:24px 0 90px;background:#020a1a;color:#8ea4c6;font-size:12px}.foot
 .review-more button:hover{border-color:rgba(82,220,255,.45);background:rgba(255,255,255,.05)}
 @media(max-width:940px){.review-grid{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:640px){.reviews-head{display:block}.reviews-source{margin-top:12px}.review-grid{grid-template-columns:1fr}.review-card{padding:18px}}
+
+.trust-row{display:grid;grid-template-columns:1.1fr .9fr;gap:16px;margin:0 0 26px}
+.trust-score{display:flex;align-items:center;gap:20px;padding:24px;border:1px solid rgba(85,233,255,.22);border-radius:24px;background:radial-gradient(260px 170px at 15% 30%,rgba(85,233,255,.16),transparent 70%),linear-gradient(145deg,rgba(10,34,71,.92),rgba(4,16,36,.94))}
+.trust-score strong{font-size:58px;line-height:1;letter-spacing:-.05em;color:#fff}
+.trust-stars{font-size:22px;letter-spacing:2px;color:#72e8ff}
+.trust-copy b{display:block;font-size:17px}.trust-copy span{display:block;color:var(--mut);font-size:12px;margin-top:3px}
+.trust-years{padding:24px;border:1px solid var(--line);border-radius:24px;background:linear-gradient(145deg,rgba(10,31,64,.92),rgba(4,16,36,.94))}
+.trust-years strong{display:block;font-size:29px;line-height:1.1}.trust-years p{margin:8px 0 0;color:var(--mut);font-size:13px}
+.trust-points{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:26px}
+.trust-point{padding:17px;border:1px solid var(--line);border-radius:18px;background:rgba(255,255,255,.025)}
+.trust-point b{display:block;margin-bottom:4px}.trust-point span{color:var(--mut);font-size:12px;line-height:1.45}
+@media(max-width:940px){.trust-row{grid-template-columns:1fr}.trust-points{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:640px){.trust-score{padding:20px;gap:14px}.trust-score strong{font-size:48px}.trust-points{grid-template-columns:1fr}}
 </style>
 <script>
 (function(){
@@ -229,6 +242,25 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <div><div class="kicker">Отзывы клиентов</div><h2>Что говорят после химчистки.</h2><p style="margin:8px 0 0;color:var(--mut);max-width:650px">Отзывы размещены на основе клиентских отзывов на Авито. Здесь только отзывы, связанные с химчисткой мебели.</p></div>
 <a class="reviews-source" href="https://www.avito.ru/user/a48b47d890ea3a857d486b04254535c5/profile/all/predlozheniya_uslug?id=8296352069&iid=8296352069&page_from=from_item_messenger&src=messenger&sellerId=a48b47d890ea3a857d486b04254535c5" target="_blank" rel="noopener">↗ Все отзывы на Авито</a>
 </div>
+
+<div class="trust-row">
+  <div class="trust-score reveal">
+    <div><strong>5,0</strong><div class="trust-stars" aria-label="5 из 5 звёзд">★★★★★</div></div>
+    <div class="trust-copy"><b>171 отзыв на Авито</b><span>Все 171 отзыва — с оценкой 5 звёзд</span></div>
+  </div>
+  <div class="trust-years reveal" style="--delay:80ms">
+    <strong>5 лет в сфере химчистки</strong>
+    <p>Работаем с мягкой мебелью, диванами, стульями и матрасами. Подбираем способ чистки под материал и загрязнение.</p>
+  </div>
+</div>
+
+<div class="trust-points">
+  <div class="trust-point reveal"><b>⏱️ Пунктуальность</b><span>Согласуем дату и время и приезжаем по договорённости.</span></div>
+  <div class="trust-point reveal" style="--delay:50ms"><b>🧪 Ответственный подход</b><span>Сначала оцениваем материал и загрязнение, затем выбираем подходящий способ работы.</span></div>
+  <div class="trust-point reveal" style="--delay:100ms"><b>⚙️ Профессиональное оборудование</b><span>Работаем на выезде с оборудованием и средствами для химчистки.</span></div>
+  <div class="trust-point reveal" style="--delay:150ms"><b>💨 Сушка мебели</b><span>При необходимости используем сушку, чтобы ускорить высыхание после чистки.</span></div>
+</div>
+
 <div id="reviewGrid" class="review-grid"></div>
 <div class="review-more"><button id="reviewMore" type="button">Показать ещё отзывы</button></div>
 </div>
