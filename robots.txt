@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+Disallow: /telegram-worker/
+Disallow: /miniapp.html
+Disallow: /wrangler.jsonc
+
+Sitemap: https://lordpandocha.github.io/ChistoDoma/sitemap.xml
