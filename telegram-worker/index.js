@@ -77,7 +77,7 @@ export default {
 
       if (!tgResponse.ok || !tgResult.ok) {
         console.error("Telegram API error", tgResult);
-        return json({ ok: false, error: "Telegram API error" }, 502);
+        return json({ ok: false, error: "Telegram API error", telegram_error: tgResult?.description || "Unknown Telegram error" }, 502);
       }
 
       return json({ ok: true });
