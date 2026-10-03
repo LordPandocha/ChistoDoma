@@ -6,3 +6,4 @@ Disallow: /miniapp.html
 Disallow: /wrangler.jsonc
 
 Sitemap: https://lordpandocha.github.io/ChistoDoma/sitemap.xml
+Sitemap: https://lordpandocha.github.io/ChistoDoma/sitemap.txt
