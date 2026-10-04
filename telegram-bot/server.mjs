@@ -11,7 +11,7 @@ const upload = multer({
 const PORT = process.env.PORT || 3000;
 const BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
 const CHAT_ID = process.env.TELEGRAM_CHAT_ID;
-const CORS_ORIGIN = process.env.CORS_ORIGIN || "https://lordpandocha.github.io";
+const CORS_ORIGIN = process.env.CORS_ORIGIN || "https://chistodoma86.ru,https://lordpandocha.github.io";
 
 app.use(cors({
   origin: CORS_ORIGIN.split(",").map(s => s.trim()),
