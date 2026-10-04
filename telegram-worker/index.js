@@ -1,21 +1,25 @@
-const ALLOWED_ORIGIN = "https://lordpandocha.github.io";
-const SITE_URL = "https://lordpandocha.github.io/ChistoDoma/";
-const APPLICATION_URL = "https://lordpandocha.github.io/ChistoDoma/miniapp.html";
+const NEW_SITE_ORIGIN = "https://chistodoma86.ru";
+const OLD_SITE_ORIGIN = "https://lordpandocha.github.io";
+const SITE_URL = NEW_SITE_ORIGIN + "/";
+const APPLICATION_URL = SITE_URL + "miniapp.html";
+const ALLOWED_ORIGINS = new Set([NEW_SITE_ORIGIN, OLD_SITE_ORIGIN]);
 
-function corsHeaders() {
+function corsHeaders(origin = NEW_SITE_ORIGIN) {
+  const allowedOrigin = ALLOWED_ORIGINS.has(origin) ? origin : NEW_SITE_ORIGIN;
   return {
-    "Access-Control-Allow-Origin": ALLOWED_ORIGIN,
+    "Access-Control-Allow-Origin": allowedOrigin,
     "Access-Control-Allow-Methods": "POST, OPTIONS, GET",
     "Access-Control-Allow-Headers": "Content-Type, Accept",
+    "Vary": "Origin",
   };
 }
 
-function json(data, status = 200) {
+function json(data, status = 200, origin = NEW_SITE_ORIGIN) {
   return new Response(JSON.stringify(data), {
     status,
     headers: {
       "Content-Type": "application/json; charset=utf-8",
-      ...corsHeaders(),
+      ...corsHeaders(origin),
     },
   });
 }
@@ -257,20 +261,22 @@ export default {
   async fetch(request, env) {
     const url = new URL(request.url);
 
+    const requestOrigin = request.headers.get("Origin") || NEW_SITE_ORIGIN;
+
     if (request.method === "OPTIONS") {
-      return new Response(null, { status: 204, headers: corsHeaders() });
+      return new Response(null, { status: 204, headers: corsHeaders(requestOrigin) });
     }
 
     if (request.method === "GET" && url.pathname === "/health") {
       return json({
         ok: true,
         configured: Boolean(env.TELEGRAM_BOT_TOKEN && env.TELEGRAM_CHAT_ID),
-      });
+      }, 200, requestOrigin);
     }
 
     if (request.method === "GET" && url.pathname === "/__setup-bot") {
       if (!env.TELEGRAM_BOT_TOKEN || !env.TELEGRAM_CHAT_ID) {
-        return json({ ok: false, error: "Telegram secrets are not configured" }, 500);
+        return json({ ok: false, error: "Telegram secrets are not configured" }, 500, requestOrigin);
       }
       return setupBot(request, env);
     }
@@ -283,11 +289,11 @@ export default {
     }
 
     if (request.method !== "POST" || url.pathname !== "/api/lead") {
-      return json({ ok: false, error: "Not found" }, 404);
+      return json({ ok: false, error: "Not found" }, 404, requestOrigin);
     }
 
     if (!env.TELEGRAM_BOT_TOKEN || !env.TELEGRAM_CHAT_ID) {
-      return json({ ok: false, error: "Telegram is not configured on the server" }, 500);
+      return json({ ok: false, error: "Telegram is not configured on the server" }, 500, requestOrigin);
     }
 
     try {
@@ -299,10 +305,10 @@ export default {
       const city = String(form.get("city") || "Нефтеюганск").trim();
       const photo = form.get("photo");
 
-      if (!phone) return json({ ok: false, error: "Phone is required" }, 400);
-      if (!(photo instanceof File)) return json({ ok: false, error: "Photo is required" }, 400);
+      if (!phone) return json({ ok: false, error: "Phone is required" }, 400, requestOrigin);
+      if (!(photo instanceof File)) return json({ ok: false, error: "Photo is required" }, 400, requestOrigin);
       if (photo.size > 10 * 1024 * 1024) {
-        return json({ ok: false, error: "Photo is larger than 10 MB" }, 400);
+        return json({ ok: false, error: "Photo is larger than 10 MB" }, 400, requestOrigin);
       }
 
       const caption = [
@@ -333,7 +339,7 @@ export default {
           ok: false,
           error: "Telegram API error",
           telegram_error: tgResult?.description || "Unknown Telegram error"
-        }, 502);
+        }, 502, requestOrigin);
       }
 
       await telegram(env, "editMessageReplyMarkup", {
@@ -342,10 +348,10 @@ export default {
         reply_markup: adminLeadKeyboard(phone),
       });
 
-      return json({ ok: true });
+      return json({ ok: true }, 200, requestOrigin);
     } catch (error) {
       console.error("Lead error", error);
-      return json({ ok: false, error: "Internal server error" }, 500);
+      return json({ ok: false, error: "Internal server error" }, 500, requestOrigin);
     }
   }
 };
