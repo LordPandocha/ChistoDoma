@@ -445,31 +445,7 @@ const photo=document.getElementById('leadPhoto'),preview=document.getElementById
 function show(msg,type){status.textContent=msg;status.className='status show '+type}
 photo.addEventListener('change',()=>{const f=photo.files&&photo.files[0];if(!f){preview.classList.remove('on');return}if(f.size>10*1024*1024){show('Фото больше 10 МБ. Выберите файл поменьше.','err');photo.value='';preview.classList.remove('on');return}fileName.textContent=f.name;previewImg.src=URL.createObjectURL(f);preview.classList.add('on')});
 const phone=document.getElementById('leadPhone');phone.addEventListener('input',()=>{const d=phone.value.replace(/\D/g,'').replace(/^8/,'7').slice(0,11);let o='+7';if(d.length>1)o+=' '+d.slice(1,4);if(d.length>=5)o+=' '+d.slice(4,7);if(d.length>=8)o+='-'+d.slice(7,9);if(d.length>=10)o+='-'+d.slice(9,11);phone.value=o});
-const LEAD_API_URL='https://chistodoma.stolovka.workers.dev/api/lead';
-const LEAD_LOG_KEY='chistodoma_lead_log_v1';
-function cleanLeadLog(){
- try{
-   const now=Date.now(),raw=JSON.parse(localStorage.getItem(LEAD_LOG_KEY)||'[]');
-   const fresh=(Array.isArray(raw)?raw:[]).filter(x=>now-(+x.ts||0)<24*60*60*1000).slice(-20);
-   localStorage.setItem(LEAD_LOG_KEY,JSON.stringify(fresh));
- }catch(_){}
-}
-function writeLeadLog(status,id){
- try{
-   cleanLeadLog();
-   const raw=JSON.parse(localStorage.getItem(LEAD_LOG_KEY)||'[]');
-   raw.push({id,status,ts:Date.now()});
-   localStorage.setItem(LEAD_LOG_KEY,JSON.stringify(raw.slice(-20)));
- }catch(_){}
-}
-function finishLeadLog(id,status){
- try{
-   cleanLeadLog();
-   const raw=JSON.parse(localStorage.getItem(LEAD_LOG_KEY)||'[]');
-   localStorage.setItem(LEAD_LOG_KEY,JSON.stringify((Array.isArray(raw)?raw:[]).map(x=>x.id===id?{...x,status,ts:Date.now()}:x).slice(-20)));
- }catch(_){}
-}
-cleanLeadLog();
+const LEAD_API_URL='/api/lead';
 
 async function fetchLeadWithTimeout(url, data, timeoutMs){
   const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),timeoutMs);
