@@ -1,8 +1,9 @@
 const NEW_SITE_ORIGIN = "https://chistodoma86.ru";
+const WWW_SITE_ORIGIN = "https://www.chistodoma86.ru";
 const OLD_SITE_ORIGIN = "https://lordpandocha.github.io";
 const SITE_URL = NEW_SITE_ORIGIN + "/";
 const APPLICATION_URL = SITE_URL + "miniapp.html";
-const ALLOWED_ORIGINS = new Set([NEW_SITE_ORIGIN, OLD_SITE_ORIGIN]);
+const ALLOWED_ORIGINS = new Set([NEW_SITE_ORIGIN, WWW_SITE_ORIGIN, OLD_SITE_ORIGIN]);
 
 function corsHeaders(origin = NEW_SITE_ORIGIN) {
   const allowedOrigin = ALLOWED_ORIGINS.has(origin) ? origin : NEW_SITE_ORIGIN;
