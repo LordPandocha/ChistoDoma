@@ -280,10 +280,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <section id="uslugi" class="section"><div class="wrap">
 <div class="head reveal"><div><div class="kicker">Услуги</div><h2>Чистим то, что хочется снова любить.</h2></div><p>Подбираем способ чистки под материал и загрязнение. Мастер приезжает с оборудованием и работает на месте.</p></div>
 <div class="cards">
-<article class="card reveal"><div class="ico">🛋️</div><h3>Диваны</h3><p>Прямые, книжки и другие модели. Работаем с пятнами и бытовыми загрязнениями.</p><span class="price">от 2 400 ₽</span></article>
+<article class="card reveal"><div class="ico">🛋️</div><h3>Диваны</h3><p>Прямые, книжки и другие модели. Работаем с пятнами и бытовыми загрязнениями.</p><span class="price">от 2 900 ₽</span></article>
 <article class="card reveal" style="--delay:60ms"><div class="ico">🪑</div><h3>Кресла</h3><p>Освежаем обивку и убираем заметные следы эксплуатации.</p><span class="price">от 1 400 ₽</span></article>
 <article class="card reveal" style="--delay:120ms"><div class="ico">🍽️</div><h3>Стулья</h3><p>Быстрая чистка мягких сидений и обивки.</p><span class="price">от 400 ₽</span></article>
-<article class="card reveal" style="--delay:180ms"><div class="ico">🛏️</div><h3>Матрасы</h3><p>Чистим поверхность матраса с выездом на дом.</p><span class="price">от 2 100 ₽</span></article>
+<article class="card reveal" style="--delay:180ms"><div class="ico">🛏️</div><h3>Матрасы</h3><p>Чистим поверхность матраса с выездом на дом.</p><span class="price">от 2 400 ₽</span></article>
 <article class="card reveal" style="--delay:240ms"><div class="ico">✨</div><h3>Пятна</h3><p>Работаем с бытовыми загрязнениями с учётом ткани.</p><span class="price">по фото</span></article>
 <article class="card reveal" style="--delay:300ms"><div class="ico">💨</div><h3>Запахи</h3><p>Стараемся убрать источник запаха, а не просто замаскировать его.</p><span class="price">по ситуации</span></article>
 </div></div></section>
@@ -340,7 +340,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 <section id="prices" class="section"><div class="wrap">
 <div class="head reveal"><div><div class="kicker">Цены</div><h2>Узнайте примерную цену.</h2></div><p>Точную стоимость скажем после просмотра фото.</p></div>
-<div class="calc"><div class="panel reveal"><b>Что чистим?</b><div class="chips" id="chips"></div><div class="qty"><button id="minus" type="button">−</button><output id="qty">1 шт.</output><button id="plus" type="button">+</button><small id="unit"></small></div></div><div class="total reveal" style="--delay:100ms"><small>Ориентир</small><strong id="sum">от 2 400 ₽</strong><span id="note">Диван</span><a class="btn main" style="margin-top:16px" href="#zayavka">📸 Узнать цену по фото</a></div></div>
+<div class="calc"><div class="panel reveal"><b>Что чистим?</b><div class="chips" id="chips"></div><div class="qty"><button id="minus" type="button">−</button><output id="qty">1 шт.</output><button id="plus" type="button">+</button><small id="unit"></small></div></div><div class="total reveal" style="--delay:100ms"><small>Ориентир</small><strong id="sum">от 2 900 ₽</strong><span id="note">Диван</span><a class="btn main" style="margin-top:16px" href="#zayavka">📸 Узнать цену по фото</a></div></div>
 </div></section>
 
 <section id="zayavka" class="section lead">
@@ -389,7 +389,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <footer style="position:relative;z-index:1"><div class="wrap footer"><div>© Чисто Дома · Нефтеюганск</div><div><a href="privacy.html">Политика конфиденциальности</a> · <a href="https://vk.ru/chisto_doma_nft" target="_blank" rel="noopener">ВКонтакте</a> · <a href="https://instagram.com/chisto_doma_nft" target="_blank" rel="noopener">Instagram</a></div></div></footer>
 <div class="mobile"><a href="#zayavka">📸 Заявка</a><a href="tel:+79120883029">📞 Позвонить</a></div>
 <script>
-const prices=[{n:'Стул',p:400},{n:'Кресло',p:1400},{n:'Диван',p:2400},{n:'Угловой диван',p:3800},{n:'Матрас',p:2100}];
+const prices=[{n:'Стул',p:400},{n:'Кресло',p:1400},{n:'Диван',p:2900},{n:'Угловой диван',p:3800},{n:'Матрас',p:2400}];
 let current=2,quantity=1;
 const chips=document.getElementById('chips');
 if(chips){
@@ -445,7 +445,7 @@ const photo=document.getElementById('leadPhoto'),preview=document.getElementById
 function show(msg,type){status.textContent=msg;status.className='status show '+type}
 photo.addEventListener('change',()=>{const f=photo.files&&photo.files[0];if(!f){preview.classList.remove('on');return}if(f.size>10*1024*1024){show('Фото больше 10 МБ. Выберите файл поменьше.','err');photo.value='';preview.classList.remove('on');return}fileName.textContent=f.name;previewImg.src=URL.createObjectURL(f);preview.classList.add('on')});
 const phone=document.getElementById('leadPhone');phone.addEventListener('input',()=>{const d=phone.value.replace(/\D/g,'').replace(/^8/,'7').slice(0,11);let o='+7';if(d.length>1)o+=' '+d.slice(1,4);if(d.length>=5)o+=' '+d.slice(4,7);if(d.length>=8)o+='-'+d.slice(7,9);if(d.length>=10)o+='-'+d.slice(9,11);phone.value=o});
-const LEAD_API_URLS=[location.origin+'/api/lead','https://chistodoma.stolovka.workers.dev/api/lead'];
+const LEAD_API_URL='https://chistodoma.stolovka.workers.dev/api/lead';
 const LEAD_LOG_KEY='chistodoma_lead_log_v1';
 function cleanLeadLog(){
  try{
@@ -490,17 +490,7 @@ document.getElementById('leadForm').addEventListener('submit',async e=>{
  writeLeadLog('sending',leadId);
  btn.disabled=true;btn.textContent='Отправляем заявку…';
  try{
-   let response=null,lastError=null;
-   for(const url of LEAD_API_URLS){
-     try{
-       const candidate=await fetchLeadWithTimeout(url,data,12000);
-       if(candidate.status===404 && url!==LEAD_API_URLS[LEAD_API_URLS.length-1]) continue;
-       response=candidate;break;
-     }catch(err){lastError=err}
-   }
-   if(!response){
-     throw new Error(lastError?.name==='AbortError'?'Сервер не ответил за 12 секунд. Проверьте интернет и нажмите отправку ещё раз.':'Не удалось связаться с сервером. VPN для сайта не требуется.');
-   }
+   const response=await fetchLeadWithTimeout(LEAD_API_URL,data,15000);
    const j=await response.json().catch(()=>({}));
    if(!response.ok) throw new Error(j.telegram_error||j.error||'Не удалось отправить заявку');
    finishLeadLog(leadId,'sent');
@@ -510,7 +500,7 @@ document.getElementById('leadForm').addEventListener('submit',async e=>{
      document.querySelector('.type-chip[data-value="Диван"]')?.classList.add('active');
      typeSelect.value='Диван'
    }
-   show('✅ Готово. Заявка принята и передана мастеру.','ok');
+   show('✅ Готово. Заявка принята. Мастер получит её в Telegram.','ok');
  }catch(err){
    finishLeadLog(leadId,'failed');
    show('⚠️ '+err.message,'err');
