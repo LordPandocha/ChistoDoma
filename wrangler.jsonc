@@ -5,8 +5,8 @@
   "compatibility_date": "2026-10-03",
   "routes": [
     {
-      "pattern": "chistodoma86.ru/api/*",
-      "zone_name": "chistodoma86.ru"
+      "pattern": "api.chistodoma86.ru",
+      "custom_domain": true
     }
   ]
 }
