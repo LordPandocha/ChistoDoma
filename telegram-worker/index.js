@@ -186,7 +186,7 @@ async function handleTelegramUpdate(request, env) {
       await sendMessage(
         env,
         chatId,
-        "💰 <b>Цены</b>\n\nСтул — от 400 ₽\nКресло — от 1 400 ₽\nДиван — от 2 400 ₽\nУгловой диван — от 3 800 ₽\nМатрас — от 2 100 ₽",
+        "💰 <b>Цены</b>\n\nСтул — от 400 ₽\nКресло — от 1 400 ₽\nДиван — от 2 900 ₽\nУгловой диван — от 3 800 ₽\nМатрас — от 2 400 ₽",
         mainKeyboard
       );
     } else if (text === "/services" || text.includes("услуг")) {
@@ -269,6 +269,53 @@ async function setupBot(request, env) {
   });
 }
 
+async function deliverLeadToTelegram(env, leadId, phone, item, comment, site, city, photo) {
+  const caption = [
+    "🧼 НОВАЯ ЗАЯВКА — ЧИСТО ДОМА",
+    "",
+    "📱 Телефон: " + phone,
+    "🛋 Что чистить: " + (item || "Не указано"),
+    "💬 Комментарий: " + (comment || "Нет"),
+    "📍 Город: " + city,
+    "🌐 Сайт: " + site
+  ].join("\n");
+
+  try {
+    const tgForm = new FormData();
+    tgForm.append("chat_id", env.TELEGRAM_CHAT_ID);
+    tgForm.append("caption", caption);
+    tgForm.append("photo", photo, photo.name || "photo.jpg");
+
+    const tgResponse = await fetchWithTimeout(
+      "https://api.telegram.org/bot" + env.TELEGRAM_BOT_TOKEN + "/sendPhoto",
+      { method: "POST", body: tgForm },
+      12000
+    );
+
+    const tgResult = await tgResponse.json();
+
+    if (!tgResponse.ok || !tgResult.ok) {
+      throw new Error(tgResult?.description || "Telegram API error");
+    }
+
+    await telegram(env, "editMessageReplyMarkup", {
+      chat_id: env.TELEGRAM_CHAT_ID,
+      message_id: tgResult.result?.message_id,
+      reply_markup: adminLeadKeyboard(phone),
+    });
+
+    console.log("lead.sent", {
+      leadId,
+      telegramMessageId: tgResult.result?.message_id
+    });
+  } catch (error) {
+    console.error("lead.delivery_failed", {
+      leadId,
+      error: String(error)
+    });
+  }
+}
+
 export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
@@ -283,7 +330,7 @@ export default {
       return json({
         ok: true,
         configured: Boolean(env.TELEGRAM_BOT_TOKEN && env.TELEGRAM_CHAT_ID),
-        version: "lead-timeout-2026-10-05",
+        version: "lead-fast-2026-10-05",
       }, 200, requestOrigin);
     }
 
@@ -327,47 +374,25 @@ export default {
         return json({ ok: false, error: "Photo is larger than 10 MB" }, 400, requestOrigin);
       }
 
-      const caption = [
-        "🧼 НОВАЯ ЗАЯВКА — ЧИСТО ДОМА",
-        "",
-        "📱 Телефон: " + phone,
-        "🛋 Что чистить: " + (item || "Не указано"),
-        "💬 Комментарий: " + (comment || "Нет"),
-        "📍 Город: " + city,
-        "🌐 Сайт: " + site
-      ].join("\n");
-
-      const tgForm = new FormData();
-      tgForm.append("chat_id", env.TELEGRAM_CHAT_ID);
-      tgForm.append("caption", caption);
-      tgForm.append("photo", photo, photo.name || "photo.jpg");
-
-      const tgResponse = await fetchWithTimeout(
-        "https://api.telegram.org/bot" + env.TELEGRAM_BOT_TOKEN + "/sendPhoto",
-        { method: "POST", body: tgForm },
-        12000
+      const delivery = deliverLeadToTelegram(
+        env,
+        leadId,
+        phone,
+        item,
+        comment,
+        site,
+        city,
+        photo
       );
 
-      const tgResult = await tgResponse.json();
-
-      if (!tgResponse.ok || !tgResult.ok) {
-        console.error("Telegram API error:", tgResult);
-        return json({
-          ok: false,
-          error: "Telegram API error",
-          telegram_error: tgResult?.description || "Unknown Telegram error"
-        }, 502, requestOrigin);
+      if (ctx && typeof ctx.waitUntil === "function") {
+        ctx.waitUntil(delivery);
+      } else {
+        await delivery;
       }
 
-      const decorate = telegram(env, "editMessageReplyMarkup", {
-        chat_id: env.TELEGRAM_CHAT_ID,
-        message_id: tgResult.result?.message_id,
-        reply_markup: adminLeadKeyboard(phone),
-      }).catch((error) => console.error("lead.decorate_failed", { leadId, error: String(error) }));
-      if (ctx && typeof ctx.waitUntil === "function") ctx.waitUntil(decorate);
-      else await decorate;
-      console.log("lead.sent", { leadId, telegramMessageId: tgResult.result?.message_id });
-      return json({ ok: true, lead_id: leadId }, 200, requestOrigin);
+      console.log("lead.queued", { leadId });
+      return json({ ok: true, lead_id: leadId, queued: true }, 202, requestOrigin);
     } catch (error) {
       console.error("lead.failed", { leadId, error: String(error) });
       return json({ ok: false, error: "Internal server error" }, 500, requestOrigin);
