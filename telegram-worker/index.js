@@ -218,57 +218,6 @@ async function handleTelegramUpdate(request, env) {
   return new Response("OK");
 }
 
-async function setupBot(request, env) {
-  const url = new URL(request.url);
-  const webhookUrl = url.origin + "/telegram/webhook";
-  const secret = webhookSecret(env.TELEGRAM_BOT_TOKEN);
-
-  const results = {};
-  results.commands = await telegram(env, "setMyCommands", {
-    commands: [
-      { command: "start", description: "Главное меню" },
-      { command: "application", description: "Оставить заявку" },
-      { command: "prices", description: "Посмотреть цены" },
-      { command: "services", description: "Наши услуги" },
-    ],
-  });
-
-  results.description = await telegram(env, "setMyDescription", {
-    description: "Химчистка мебели в Нефтеюганске. Пришлите фото — подскажем по цене и запишем на выезд.",
-  });
-
-  results.shortDescription = await telegram(env, "setMyShortDescription", {
-    short_description: "Химчистка мебели в Нефтеюганске 🧼📸",
-  });
-
-  results.menu = await telegram(env, "setChatMenuButton", {
-    menu_button: {
-      type: "web_app",
-      text: "📋 Заявка",
-      web_app: { url: APPLICATION_URL },
-    },
-  });
-
-  results.webhook = await telegram(env, "setWebhook", {
-    url: webhookUrl,
-    secret_token: secret,
-    allowed_updates: ["message", "callback_query"],
-    drop_pending_updates: false,
-  });
-
-  return json({
-    ok: Boolean(
-      results.commands?.ok &&
-      results.description?.ok &&
-      results.shortDescription?.ok &&
-      results.menu?.ok &&
-      results.webhook?.ok
-    ),
-    webhook: webhookUrl,
-    results,
-  });
-}
-
 async function deliverLeadToTelegram(env, leadId, phone, item, comment, site, city, photo) {
   const caption = [
     "🧼 НОВАЯ ЗАЯВКА — ЧИСТО ДОМА",
@@ -332,13 +281,6 @@ export default {
         configured: Boolean(env.TELEGRAM_BOT_TOKEN && env.TELEGRAM_CHAT_ID),
         version: "lead-fast-2026-10-05",
       }, 200, requestOrigin);
-    }
-
-    if (request.method === "GET" && url.pathname === "/__setup-bot") {
-      if (!env.TELEGRAM_BOT_TOKEN || !env.TELEGRAM_CHAT_ID) {
-        return json({ ok: false, error: "Telegram secrets are not configured" }, 500, requestOrigin);
-      }
-      return setupBot(request, env);
     }
 
     if (request.method === "POST" && url.pathname === "/telegram/webhook") {
