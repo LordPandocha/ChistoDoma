@@ -6,4 +6,3 @@ Disallow: /miniapp.html
 Disallow: /wrangler.jsonc
 
 Sitemap: https://chistodoma86.ru/sitemap.xml
-Sitemap: https://chistodoma86.ru/sitemap.txt
