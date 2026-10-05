@@ -283,6 +283,7 @@ export default {
       return json({
         ok: true,
         configured: Boolean(env.TELEGRAM_BOT_TOKEN && env.TELEGRAM_CHAT_ID),
+        version: "lead-timeout-2026-10-05",
       }, 200, requestOrigin);
     }
 
