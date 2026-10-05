@@ -202,7 +202,7 @@ button:disabled{opacity:.6;cursor:wait}
     submit.textContent = 'Отправляем…';
 
     try {
-      const res = await fetch('https://chistodoma.stolovka.workers.dev/api/lead', {
+      const res = await fetch('/api/lead', {
         method:'POST',
         body:data,
         headers:{'Accept':'application/json'}
