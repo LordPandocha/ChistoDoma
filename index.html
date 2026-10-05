@@ -445,7 +445,79 @@ const photo=document.getElementById('leadPhoto'),preview=document.getElementById
 function show(msg,type){status.textContent=msg;status.className='status show '+type}
 photo.addEventListener('change',()=>{const f=photo.files&&photo.files[0];if(!f){preview.classList.remove('on');return}if(f.size>10*1024*1024){show('Фото больше 10 МБ. Выберите файл поменьше.','err');photo.value='';preview.classList.remove('on');return}fileName.textContent=f.name;previewImg.src=URL.createObjectURL(f);preview.classList.add('on')});
 const phone=document.getElementById('leadPhone');phone.addEventListener('input',()=>{const d=phone.value.replace(/\D/g,'').replace(/^8/,'7').slice(0,11);let o='+7';if(d.length>1)o+=' '+d.slice(1,4);if(d.length>=5)o+=' '+d.slice(4,7);if(d.length>=8)o+='-'+d.slice(7,9);if(d.length>=10)o+='-'+d.slice(9,11);phone.value=o});
-document.getElementById('leadForm').addEventListener('submit',async e=>{e.preventDefault();const f=photo.files&&photo.files[0];if(!f){show('Добавьте фото — мастер лучше поймёт задачу.','err');return}if(!typeSelect.value){show('Выберите, что нужно почистить.','err');return}const form=e.currentTarget,data=new FormData(form);data.set('site','Чисто Дома');data.set('city','Нефтеюганск');const btn=form.querySelector('button[type="submit"]');btn.disabled=true;btn.textContent='Отправляем заявку…';try{const r=await fetch('https://chistodoma.stolovka.workers.dev/api/lead',{method:'POST',body:data,headers:{Accept:'application/json'}});const j=await r.json().catch(()=>({}));if(!r.ok)throw new Error(j.telegram_error||j.error||'Не удалось отправить заявку');form.reset();preview.classList.remove('on');if(typeGrid){document.querySelectorAll('.type-chip').forEach(b=>b.classList.remove('active'));document.querySelector('.type-chip[data-value="Диван"]')?.classList.add('active');typeSelect.value='Диван'}show('✅ Готово. Фото уже у мастера — скоро свяжемся с вами.','ok')}catch(err){show('⚠️ '+err.message,'err')}finally{btn.disabled=false;btn.textContent='✨ Отправить — пусть мастер посмотрит'}});
+const LEAD_API_URLS=[location.origin+'/api/lead','https://chistodoma.stolovka.workers.dev/api/lead'];
+const LEAD_LOG_KEY='chistodoma_lead_log_v1';
+function cleanLeadLog(){
+ try{
+   const now=Date.now(),raw=JSON.parse(localStorage.getItem(LEAD_LOG_KEY)||'[]');
+   const fresh=(Array.isArray(raw)?raw:[]).filter(x=>now-(+x.ts||0)<24*60*60*1000).slice(-20);
+   localStorage.setItem(LEAD_LOG_KEY,JSON.stringify(fresh));
+ }catch(_){}
+}
+function writeLeadLog(status,id){
+ try{
+   cleanLeadLog();
+   const raw=JSON.parse(localStorage.getItem(LEAD_LOG_KEY)||'[]');
+   raw.push({id,status,ts:Date.now()});
+   localStorage.setItem(LEAD_LOG_KEY,JSON.stringify(raw.slice(-20)));
+ }catch(_){}
+}
+function finishLeadLog(id,status){
+ try{
+   cleanLeadLog();
+   const raw=JSON.parse(localStorage.getItem(LEAD_LOG_KEY)||'[]');
+   localStorage.setItem(LEAD_LOG_KEY,JSON.stringify((Array.isArray(raw)?raw:[]).map(x=>x.id===id?{...x,status,ts:Date.now()}:x).slice(-20)));
+ }catch(_){}
+}
+cleanLeadLog();
+
+async function fetchLeadWithTimeout(url, data, timeoutMs){
+  const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),timeoutMs);
+  try{
+    return await fetch(url,{method:'POST',body:data,headers:{Accept:'application/json'},signal:controller.signal});
+  }finally{clearTimeout(timer)}
+}
+
+document.getElementById('leadForm').addEventListener('submit',async e=>{
+ e.preventDefault();
+ const f=photo.files&&photo.files[0];
+ if(!f){show('Добавьте фото — мастер лучше поймёт задачу.','err');return}
+ if(!typeSelect.value){show('Выберите, что нужно почистить.','err');return}
+ const form=e.currentTarget,data=new FormData(form);
+ data.set('site','Чисто Дома');data.set('city','Нефтеюганск');
+ const btn=form.querySelector('button[type="submit"]');
+ const leadId='lead-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,8);
+ writeLeadLog('sending',leadId);
+ btn.disabled=true;btn.textContent='Отправляем заявку…';
+ try{
+   let response=null,lastError=null;
+   for(const url of LEAD_API_URLS){
+     try{
+       const candidate=await fetchLeadWithTimeout(url,data,12000);
+       if(candidate.status===404 && url!==LEAD_API_URLS[LEAD_API_URLS.length-1]) continue;
+       response=candidate;break;
+     }catch(err){lastError=err}
+   }
+   if(!response){
+     throw new Error(lastError?.name==='AbortError'?'Сервер не ответил за 12 секунд. Проверьте интернет и нажмите отправку ещё раз.':'Не удалось связаться с сервером. VPN для сайта не требуется.');
+   }
+   const j=await response.json().catch(()=>({}));
+   if(!response.ok) throw new Error(j.telegram_error||j.error||'Не удалось отправить заявку');
+   finishLeadLog(leadId,'sent');
+   form.reset();preview.classList.remove('on');
+   if(typeGrid){
+     document.querySelectorAll('.type-chip').forEach(b=>b.classList.remove('active'));
+     document.querySelector('.type-chip[data-value="Диван"]')?.classList.add('active');
+     typeSelect.value='Диван'
+   }
+   show('✅ Готово. Заявка принята и передана мастеру.','ok');
+ }catch(err){
+   finishLeadLog(leadId,'failed');
+   show('⚠️ '+err.message,'err');
+ }finally{
+   btn.disabled=false;btn.textContent='✨ Отправить — пусть мастер посмотрит';
+ }
+});
 </script>
 </body>
 </html>
