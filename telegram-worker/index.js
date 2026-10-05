@@ -29,14 +29,25 @@ function webhookSecret(token) {
   return token.replace(/[^A-Za-z0-9_-]/g, "").slice(0, 64);
 }
 
+async function fetchWithTimeout(url, init, timeoutMs = 12000) {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
+  try {
+    return await fetch(url, { ...init, signal: controller.signal });
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
 async function telegram(env, method, body) {
-  const response = await fetch(
+  const response = await fetchWithTimeout(
     "https://api.telegram.org/bot" + env.TELEGRAM_BOT_TOKEN + "/" + method,
     {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body),
-    }
+    },
+    12000
   );
   return response.json();
 }
@@ -259,7 +270,7 @@ async function setupBot(request, env) {
 }
 
 export default {
-  async fetch(request, env) {
+  async fetch(request, env, ctx) {
     const url = new URL(request.url);
 
     const requestOrigin = request.headers.get("Origin") || NEW_SITE_ORIGIN;
@@ -297,6 +308,9 @@ export default {
       return json({ ok: false, error: "Telegram is not configured on the server" }, 500, requestOrigin);
     }
 
+    const leadId =
+      (globalThis.crypto && typeof crypto.randomUUID === "function" ? crypto.randomUUID() : Date.now().toString(36));
+    console.log("lead.received", { leadId, origin: requestOrigin });
     try {
       const form = await request.formData();
       const phone = String(form.get("phone") || "").trim();
@@ -327,9 +341,10 @@ export default {
       tgForm.append("caption", caption);
       tgForm.append("photo", photo, photo.name || "photo.jpg");
 
-      const tgResponse = await fetch(
+      const tgResponse = await fetchWithTimeout(
         "https://api.telegram.org/bot" + env.TELEGRAM_BOT_TOKEN + "/sendPhoto",
-        { method: "POST", body: tgForm }
+        { method: "POST", body: tgForm },
+        12000
       );
 
       const tgResult = await tgResponse.json();
@@ -343,15 +358,17 @@ export default {
         }, 502, requestOrigin);
       }
 
-      await telegram(env, "editMessageReplyMarkup", {
+      const decorate = telegram(env, "editMessageReplyMarkup", {
         chat_id: env.TELEGRAM_CHAT_ID,
         message_id: tgResult.result?.message_id,
         reply_markup: adminLeadKeyboard(phone),
-      });
-
-      return json({ ok: true }, 200, requestOrigin);
+      }).catch((error) => console.error("lead.decorate_failed", { leadId, error: String(error) }));
+      if (ctx && typeof ctx.waitUntil === "function") ctx.waitUntil(decorate);
+      else await decorate;
+      console.log("lead.sent", { leadId, telegramMessageId: tgResult.result?.message_id });
+      return json({ ok: true, lead_id: leadId }, 200, requestOrigin);
     } catch (error) {
-      console.error("Lead error", error);
+      console.error("lead.failed", { leadId, error: String(error) });
       return json({ ok: false, error: "Internal server error" }, 500, requestOrigin);
     }
   }
