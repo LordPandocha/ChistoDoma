@@ -42,12 +42,12 @@ async function fetchWithTimeout(url, init, timeoutMs = 12000) {
 const TURNSTILE_VERIFY_URL = "https://challenges.cloudflare.com/turnstile/v0/siteverify";
 
 async function verifyTurnstile(env, token, request) {
-  if (!env.TURNSTILE_SECRET_KEY) {
+  if (!env.TURNSTILE_SECRET) {
     return { success: false, error: "Turnstile is not configured on the server" };
   }
 
   const body = new URLSearchParams();
-  body.set("secret", env.TURNSTILE_SECRET_KEY);
+  body.set("secret", env.TURNSTILE_SECRET);
   body.set("response", token);
   const remoteIp = request.headers.get("CF-Connecting-IP");
   if (remoteIp) body.set("remoteip", remoteIp);
@@ -305,8 +305,8 @@ export default {
       return json({
         ok: true,
         configured: Boolean(env.TELEGRAM_BOT_TOKEN && env.TELEGRAM_CHAT_ID),
-        version: "lead-fast-2026-10-06",
-        turnstile: Boolean(env.TURNSTILE_SECRET_KEY),
+        version: "lead-turnstile-2026-10-06",
+        turnstile: Boolean(env.TURNSTILE_SECRET),
       }, 200, requestOrigin);
     }
 
@@ -337,7 +337,6 @@ export default {
       const city = String(form.get("city") || "Нефтеюганск").trim();
       const photo = form.get("photo");
       const honeypot = String(form.get("website") || "").trim();
-      const turnstileRequired = String(form.get("turnstile_required") || "") === "1";
       const turnstileToken = String(form.get("cf-turnstile-response") || "").trim();
 
       if (honeypot) {
@@ -347,20 +346,32 @@ export default {
       if (!phone) return json({ ok: false, error: "Phone is required" }, 400, requestOrigin);
       if (!(photo instanceof File)) return json({ ok: false, error: "Photo is required" }, 400, requestOrigin);
 
-      if (turnstileRequired) {
-        if (!turnstileToken) {
-          return json({ ok: false, error: "Bot protection check is required" }, 400, requestOrigin);
-        }
-        const verification = await verifyTurnstile(env, turnstileToken, request);
-        const hostnameOk =
-          !verification.hostname ||
-          verification.hostname === "chistodoma86.ru" ||
-          verification.hostname === "www.chistodoma86.ru";
-        if (!verification.success || !hostnameOk) {
-          console.warn("lead.turnstile_failed", { leadId, error_codes: verification["error-codes"] || [] });
-          return json({ ok: false, error: "Bot protection check failed" }, 403, requestOrigin);
-        }
+      if (!env.TURNSTILE_SECRET) {
+        console.error("lead.turnstile_not_configured", { leadId });
+        return json({ ok: false, error: "Bot protection is not configured on the server" }, 503, requestOrigin);
       }
+
+      if (!turnstileToken) {
+        return json({ ok: false, error: "Bot protection check is required" }, 400, requestOrigin);
+      }
+
+      const verification = await verifyTurnstile(env, turnstileToken, request);
+      const hostnameOk =
+        verification.hostname === "chistodoma86.ru" ||
+        verification.hostname === "www.chistodoma86.ru";
+      const actionOk = verification.action === "lead";
+
+      if (!verification.success || !hostnameOk || !actionOk) {
+        console.warn("lead.turnstile_failed", {
+          leadId,
+          success: Boolean(verification.success),
+          hostname: verification.hostname || null,
+          action: verification.action || null,
+          error_codes: verification["error-codes"] || []
+        });
+        return json({ ok: false, error: "Bot protection check failed" }, 403, requestOrigin);
+      }
+
       if (photo.size > 10 * 1024 * 1024) {
         return json({ ok: false, error: "Photo is larger than 10 MB" }, 400, requestOrigin);
       }
