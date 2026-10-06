@@ -232,6 +232,7 @@ html{scroll-behavior:auto}
   ]
 }
 </script>
+<link rel="preconnect" href="https://challenges.cloudflare.com">
 </head>
 <body>
 <!-- Google Tag Manager (noscript) -->
@@ -382,7 +383,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <div class="field"><label>Фото мебели</label><label class="dropzone" for="leadPhoto"><input id="leadPhoto" name="photo" type="file" accept="image/*" required><span class="drop-icon">📷</span><strong>Нажмите и добавьте фото</strong><small>Можно просто сфотографировать сейчас · до 10 МБ</small><span class="preview" id="filePreview"><img id="previewImg" alt="Предпросмотр"><span id="fileName"></span></span></label></div>
 <div class="field"><label for="leadPhone">Куда позвонить?</label><input id="leadPhone" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="+7 900 000-00-00" required></div>
 <div class="field optional"><label for="leadComment">Что случилось? <span>необязательно</span></label><textarea id="leadComment" name="comment" placeholder="Например: пятна от еды, ребёнок испачкал диван"></textarea></div>
+<input type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-10000px;width:1px;height:1px;opacity:0;pointer-events:none">
 <label class="consent"><input id="leadConsent" type="checkbox" required><span>Согласен на обработку данных для связи по заявке и ознакомлен с <a href="privacy.html" target="_blank" rel="noopener">политикой конфиденциальности</a>.</span></label>
+<div id="leadTurnstile" hidden style="min-height:0"></div>
 <button class="btn main quick-submit" type="submit">✨ Отправить — пусть мастер посмотрит</button>
 <div id="leadStatus" class="status" role="status" aria-live="polite"></div>
 </form>
@@ -452,11 +455,38 @@ if(typeGrid&&typeSelect){
  function choose(v){typeSelect.value=v;buttons.forEach(b=>b.classList.toggle('active',b.dataset.value===v))}
  choose('Диван');buttons.forEach(b=>b.addEventListener('click',()=>choose(b.dataset.value)));
 }
-const photo=document.getElementById('leadPhoto'),preview=document.getElementById('filePreview'),previewImg=document.getElementById('previewImg'),fileName=document.getElementById('fileName'),status=document.getElementById('leadStatus');
-function show(msg,type){status.textContent=msg;status.className='status show '+type}
+const photo=document.getElementById('leadPhoto'),preview=document.getElementById('filePreview'),previewImg=document.getElementById('previewImg'),fileName=document.getElementById('fileName'),status=document.getElementById('leadStatus'),turnstileBox=document.getElementById('leadTurnstile');
+const honeypot=document.querySelector('input[name="website"]');
+function show(msg,type=''){status.textContent=msg;status.className='status show'+(type?' '+type:'')}
 photo.addEventListener('change',()=>{const f=photo.files&&photo.files[0];if(!f){preview.classList.remove('on');return}if(f.size>10*1024*1024){show('Фото больше 10 МБ. Выберите файл поменьше.','err');photo.value='';preview.classList.remove('on');return}fileName.textContent=f.name;previewImg.src=URL.createObjectURL(f);preview.classList.add('on')});
 const phone=document.getElementById('leadPhone');phone.addEventListener('input',()=>{const d=phone.value.replace(/\D/g,'').replace(/^8/,'7').slice(0,11);let o='+7';if(d.length>1)o+=' '+d.slice(1,4);if(d.length>=5)o+=' '+d.slice(4,7);if(d.length>=8)o+='-'+d.slice(7,9);if(d.length>=10)o+='-'+d.slice(9,11);phone.value=o});
 const LEAD_API_URL='https://api.chistodoma86.ru/api/lead';
+const TURNSTILE_SITE_KEY='';
+
+let turnstileWidgetId=null;
+function loadTurnstile(){
+  if(window.turnstile) return Promise.resolve();
+  return new Promise((resolve,reject)=>{
+    const src='https://challenges.cloudflare.com/turnstile/v0/api.js';
+    const existing=document.querySelector('script[src="'+src+'"]');
+    if(existing){
+      existing.addEventListener('load',resolve,{once:true});
+      existing.addEventListener('error',()=>reject(new Error('Не удалось загрузить защиту от ботов')),{once:true});
+      return;
+    }
+    const script=document.createElement('script');
+    script.src=src;script.async=true;script.defer=true;
+    script.onload=resolve;script.onerror=()=>reject(new Error('Не удалось загрузить защиту от ботов'));
+    document.head.appendChild(script);
+  });
+}
+async function initTurnstile(){
+  if(!TURNSTILE_SITE_KEY||!turnstileBox) return;
+  turnstileBox.hidden=false;
+  await loadTurnstile();
+  turnstileWidgetId=window.turnstile.render(turnstileBox,{sitekey:TURNSTILE_SITE_KEY,theme:'dark',size:'flexible'});
+}
+initTurnstile().catch(err=>console.warn('Turnstile:',err));
 
 async function fetchLeadWithTimeout(url, data, timeoutMs){
   const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),timeoutMs);
@@ -470,10 +500,18 @@ document.getElementById('leadForm').addEventListener('submit',async e=>{
  const f=photo.files&&photo.files[0];
  if(!f){show('Добавьте фото — мастер лучше поймёт задачу.','err');return}
  if(!typeSelect.value){show('Выберите, что нужно почистить.','err');return}
+ if(honeypot&&honeypot.value.trim()){show('Не удалось отправить заявку. Попробуйте ещё раз.','err');return}
  const form=e.currentTarget,data=new FormData(form);
  data.set('site','Чисто Дома');data.set('city','Нефтеюганск');
+ data.set('turnstile_required',TURNSTILE_SITE_KEY?'1':'0');
+ if(TURNSTILE_SITE_KEY){
+   if(!window.turnstile||turnstileWidgetId===null){show('Защита от ботов ещё загружается. Подождите пару секунд.','err');return}
+   const token=window.turnstile.getResponse(turnstileWidgetId);
+   if(!token){show('Подтвердите проверку защиты и попробуйте ещё раз.','err');return}
+   data.set('cf-turnstile-response',token);
+ }
  const btn=form.querySelector('button[type="submit"]');
- btn.disabled=true;btn.textContent='Отправляем заявку…';
+ btn.disabled=true;btn.textContent='Отправляем заявку…';show('⏳ Отправляем заявку…');
  try{
    const response=await fetchLeadWithTimeout(LEAD_API_URL,data,15000);
    const j=await response.json().catch(()=>({}));
@@ -484,9 +522,12 @@ document.getElementById('leadForm').addEventListener('submit',async e=>{
      document.querySelector('.type-chip[data-value="Диван"]')?.classList.add('active');
      typeSelect.value='Диван'
    }
+   if(TURNSTILE_SITE_KEY&&window.turnstile&&turnstileWidgetId!==null) window.turnstile.reset(turnstileWidgetId);
    show('✅ Готово. Заявка принята. Мастер получит её в Telegram.','ok');
  }catch(err){
-   show('⚠️ '+err.message,'err');
+   let message=err&&err.name==='AbortError'?'Сервис заявки отвечает слишком долго. Позвоните мастеру: +7 912 088-30-29.':(err&&err.message||'Не удалось отправить заявку');
+   show('⚠️ '+message,'err');
+   if(TURNSTILE_SITE_KEY&&window.turnstile&&turnstileWidgetId!==null) window.turnstile.reset(turnstileWidgetId);
  }finally{
    btn.disabled=false;btn.textContent='✨ Отправить — пусть мастер посмотрит';
  }
