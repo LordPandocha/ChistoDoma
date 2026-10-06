@@ -38,7 +38,35 @@ footer{padding:25px 0 95px;background:#06101a;color:#8ea5bb;font-size:12px}.foot
 @media(max-width:980px){.hero-grid,.contact-layout{grid-template-columns:1fr}.hero-photo{min-height:430px}.hero-photo img{height:430px}.services{grid-template-columns:repeat(2,1fr)}.prices{grid-template-columns:repeat(3,1fr)}.steps{grid-template-columns:repeat(2,1fr)}.gallery{grid-template-columns:repeat(2,1fr)}.review-grid{grid-template-columns:repeat(2,1fr)}.links{display:none}}
 @media(max-width:620px){.wrap{width:min(100% - 22px,1180px)}.nav{height:64px}.brand span{font-size:16px}.head-btn{padding:10px 13px;font-size:12px}.hero{padding:104px 0 55px}.hero h1{font-size:45px}.hero p{font-size:16px}.hero-points{grid-template-columns:1fr}.hero-photo,.hero-photo img{min-height:300px;height:300px;border-radius:24px}.section{padding:68px 0}.section-head{display:block}.section-head p{margin-top:9px}.services,.steps,.prices,.gallery,.review-grid,.contact-links{grid-template-columns:1fr}.contact-intro{padding:23px}.contact{min-height:106px;padding:15px}.contact-icon{width:70px;height:70px}.contact-icon img{width:100%;height:100%;object-fit:cover}.contact-actions .btn{min-width:0}.price-card{min-height:145px}.actions .btn{width:100%}.mobile{position:fixed;display:flex;left:10px;right:10px;bottom:10px;z-index:60;gap:6px;padding:6px;border:1px solid rgba(255,255,255,.12);border-radius:17px;background:rgba(5,13,20,.96)}.mobile a{flex:1;text-align:center;padding:12px 8px;border-radius:12px;color:#fff;font-size:12px;font-weight:950}.mobile a:first-child{background:linear-gradient(135deg,var(--cyan),var(--blue));color:#04101a}}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
-.ui-ico{width:18px;height:18px;display:inline-block;vertical-align:-4px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;flex:none}.ui-ico.service-ui{width:28px;height:28px}.ui-ico.compare-ui{width:20px;height:20px}.ui-ico.arrow-ui,.ui-ico.external-ui{width:15px;height:15px}.btn,.head-btn,.mobile a{display:inline-flex;align-items:center;justify-content:center;gap:8px}.service-icon{display:grid;place-items:center}.hero-point b{display:flex;align-items:center;gap:8px}.icon-sprite{position:absolute;inline-size:0;block-size:0;overflow:hidden}.hero-actions .ui-ico,.actions .ui-ico{width:17px;height:17px}.service-icon{width:58px;height:58px;border-radius:18px;background:linear-gradient(145deg,#eaf7fb,#d8eef5);color:#0a7193;border:1px solid #c6e7ef}.handle{display:grid;place-items:center}.handle .compare-ui{color:#082a43}.hero-point b{font-size:13px}</style>
+.ui-ico{width:18px;height:18px;display:inline-block;vertical-align:-4px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;flex:none}.ui-ico.service-ui{width:28px;height:28px}.ui-ico.compare-ui{width:20px;height:20px}.ui-ico.arrow-ui,.ui-ico.external-ui{width:15px;height:15px}.btn,.head-btn,.mobile a{display:inline-flex;align-items:center;justify-content:center;gap:8px}.service-icon{display:grid;place-items:center}.hero-point b{display:flex;align-items:center;gap:8px}.icon-sprite{position:absolute;inline-size:0;block-size:0;overflow:hidden}.hero-actions .ui-ico,.actions .ui-ico{width:17px;height:17px}.service-icon{width:58px;height:58px;border-radius:18px;background:linear-gradient(145deg,#eaf7fb,#d8eef5);color:#0a7193;border:1px solid #c6e7ef}.handle{display:grid;place-items:center}.handle .compare-ui{color:#082a43}.hero-point b{font-size:13px}/* Magic UI-inspired motion layer: blur/fade, grid glow, shimmer, magnetic hover */ 
+@keyframes heroGridShift{0%{background-position:0 0,0 0}100%{background-position:42px 42px,-42px -42px}}
+@keyframes shineSweep{0%{transform:translateX(-140%) skewX(-18deg)}55%,100%{transform:translateX(180%) skewX(-18deg)}}
+@keyframes floatPhoto{0%,100%{transform:translate3d(0,0,0) scale(1)}50%{transform:translate3d(0,-4px,0) scale(1.002)}}
+@keyframes pulseGlow{0%,100%{opacity:.38;transform:scale(1)}50%{opacity:.65;transform:scale(1.04)}}
+@keyframes scanLine{0%{background-position:0 -80px}100%{background-position:0 520px}}
+.hero:after{content:"";position:absolute;inset:0;pointer-events:none;opacity:.34;background-image:linear-gradient(rgba(105,221,255,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(105,221,255,.07) 1px,transparent 1px);background-size:42px 42px;mask-image:linear-gradient(to right,rgba(0,0,0,.85),transparent 75%);animation:heroGridShift 18s linear infinite}
+.hero-grid>div:first-child>*{opacity:0;transform:translateY(18px);animation:magicBlurFade .7s cubic-bezier(.22,1,.36,1) forwards}
+.hero-grid>div:first-child>.eyebrow{animation-delay:.05s}.hero-grid>div:first-child>h1{animation-delay:.13s}.hero-grid>div:first-child>p{animation-delay:.22s}.hero-grid>div:first-child>.actions{animation-delay:.31s}.hero-grid>div:first-child>.hero-points{animation-delay:.4s}
+@keyframes magicBlurFade{0%{opacity:0;filter:blur(10px);transform:translateY(18px)}100%{opacity:1;filter:blur(0);transform:translateY(0)}}
+.hero-photo{animation:floatPhoto 8s ease-in-out infinite}
+.hero-photo:before{content:"";position:absolute;z-index:1;inset:-25% -30%;background:linear-gradient(105deg,transparent 40%,rgba(255,255,255,.13) 48%,rgba(103,229,255,.14) 50%,transparent 58%);transform:translateX(-140%) skewX(-18deg);animation:shineSweep 7s ease-in-out infinite;pointer-events:none}
+.btn.primary{position:relative;overflow:hidden}
+.btn.primary:after,.head-btn:after{content:"";position:absolute;inset:0;width:34%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.56),transparent);transform:translateX(-180%) skewX(-18deg);animation:shineSweep 4.8s ease-in-out infinite;pointer-events:none}
+.service,.step,.compare,.review,.contact{will-change:transform,opacity}
+.motion-ready .service,.motion-ready .step,.motion-ready .compare,.motion-ready .review,.motion-ready .contact{opacity:0;transform:translateY(22px) scale(.985);filter:blur(2px);transition:opacity .7s cubic-bezier(.22,1,.36,1),transform .7s cubic-bezier(.22,1,.36,1),filter .7s ease}
+.motion-ready .is-visible{opacity:1;transform:none;filter:none}
+.motion-ready .service:nth-child(2),.motion-ready .step:nth-child(2),.motion-ready .review:nth-child(2),.motion-ready .contact:nth-child(2){transition-delay:.06s}
+.motion-ready .service:nth-child(3),.motion-ready .step:nth-child(3),.motion-ready .review:nth-child(3),.motion-ready .contact:nth-child(3){transition-delay:.12s}
+.motion-ready .service:nth-child(4),.motion-ready .step:nth-child(4),.motion-ready .review:nth-child(4),.motion-ready .contact:nth-child(4){transition-delay:.18s}
+.service:hover,.contact:hover,.review:hover{transform:translateY(-6px) scale(1.01)}
+.service:after,.contact:after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:linear-gradient(120deg,transparent 35%,rgba(86,223,255,.08),transparent 65%);opacity:0;transform:translateX(-20%);transition:opacity .3s,transform .55s}
+.service,.contact{position:relative;overflow:hidden}.service:hover:after,.contact:hover:after{opacity:1;transform:translateX(20%)}
+.darkband{position:relative;overflow:hidden}
+.darkband:after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(110deg,transparent 0%,rgba(91,228,255,.08) 48%,transparent 52%);background-size:300% 100%;animation:scanLine 8s linear infinite}
+.darkband .wrap{position:relative;z-index:1}
+.section-head h2{text-wrap:balance}
+@media(max-width:620px){.hero:after{background-size:32px 32px}.hero-photo{animation:none}.hero-photo:before{display:none}}
+@media(prefers-reduced-motion:reduce){.hero:after,.hero-grid>div:first-child>*,.hero-photo,.hero-photo:before,.btn.primary:after,.head-btn:after,.darkband:after{animation:none!important}.motion-ready .service,.motion-ready .step,.motion-ready .compare,.motion-ready .review,.motion-ready .contact{opacity:1;transform:none;filter:none;transition:none!important}}</style>
 </head>
 <body>
 <header class="top"><div class="wrap nav">
@@ -153,5 +181,15 @@ if(grid){
  more.addEventListener('click',()=>{shown+=6;render()});
 }
 </script>
-</body>
+<script data-motion-script>
+(() => {
+  document.documentElement.classList.add('motion-ready');
+  const items = document.querySelectorAll('.service,.step,.compare,.review,.contact');
+  if (!('IntersectionObserver' in window)) { items.forEach(el=>el.classList.add('is-visible')); return; }
+  const io = new IntersectionObserver((entries, obs) => {
+    entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('is-visible'); obs.unobserve(entry.target); } });
+  }, {rootMargin:'0px 0px -8% 0px', threshold:.08});
+  items.forEach(el => io.observe(el));
+})();
+</script></body>
 </html>
