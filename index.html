@@ -473,14 +473,11 @@ document.getElementById('leadForm').addEventListener('submit',async e=>{
  const form=e.currentTarget,data=new FormData(form);
  data.set('site','Чисто Дома');data.set('city','Нефтеюганск');
  const btn=form.querySelector('button[type="submit"]');
- const leadId='lead-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,8);
- writeLeadLog('sending',leadId);
  btn.disabled=true;btn.textContent='Отправляем заявку…';
  try{
    const response=await fetchLeadWithTimeout(LEAD_API_URL,data,15000);
    const j=await response.json().catch(()=>({}));
    if(!response.ok) throw new Error(j.telegram_error||j.error||'Не удалось отправить заявку');
-   finishLeadLog(leadId,'sent');
    form.reset();preview.classList.remove('on');
    if(typeGrid){
      document.querySelectorAll('.type-chip').forEach(b=>b.classList.remove('active'));
@@ -489,7 +486,6 @@ document.getElementById('leadForm').addEventListener('submit',async e=>{
    }
    show('✅ Готово. Заявка принята. Мастер получит её в Telegram.','ok');
  }catch(err){
-   finishLeadLog(leadId,'failed');
    show('⚠️ '+err.message,'err');
  }finally{
    btn.disabled=false;btn.textContent='✨ Отправить — пусть мастер посмотрит';
