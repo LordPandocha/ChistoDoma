@@ -11,9 +11,7 @@
   ],
   "secrets": {
     "required": [
-      "TELEGRAM_BOT_TOKEN",
-      "TELEGRAM_CHAT_ID",
-      "YANDEX_SMARTCAPTCHA_SERVER_KEY"
+      "TELEGRAM_BOT_TOKEN"
     ]
   }
 }
