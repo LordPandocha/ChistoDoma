@@ -1,6 +1,6 @@
 {
   "$schema": "https://developers.cloudflare.com/workers/wrangler/config-schema.json",
-  "name": "chisto-doma-telegram-api",
+  "name": "chistodoma",
   "main": "telegram-worker/index.js",
   "compatibility_date": "2026-10-03",
   "routes": [
@@ -8,5 +8,12 @@
       "pattern": "api.chistodoma86.ru",
       "custom_domain": true
     }
-  ]
+  ],
+  "secrets": {
+    "required": [
+      "TELEGRAM_BOT_TOKEN",
+      "TELEGRAM_CHAT_ID",
+      "TURNSTILE_SECRET"
+    ]
+  }
 }
