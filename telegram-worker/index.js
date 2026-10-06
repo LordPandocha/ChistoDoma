@@ -39,6 +39,32 @@ async function fetchWithTimeout(url, init, timeoutMs = 12000) {
   }
 }
 
+const TURNSTILE_VERIFY_URL = "https://challenges.cloudflare.com/turnstile/v0/siteverify";
+
+async function verifyTurnstile(env, token, request) {
+  if (!env.TURNSTILE_SECRET_KEY) {
+    return { success: false, error: "Turnstile is not configured on the server" };
+  }
+
+  const body = new URLSearchParams();
+  body.set("secret", env.TURNSTILE_SECRET_KEY);
+  body.set("response", token);
+  const remoteIp = request.headers.get("CF-Connecting-IP");
+  if (remoteIp) body.set("remoteip", remoteIp);
+
+  const response = await fetchWithTimeout(
+    TURNSTILE_VERIFY_URL,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: body.toString(),
+    },
+    10000
+  );
+
+  return response.json();
+}
+
 async function telegram(env, method, body) {
   const response = await fetchWithTimeout(
     "https://api.telegram.org/bot" + env.TELEGRAM_BOT_TOKEN + "/" + method,
@@ -279,7 +305,8 @@ export default {
       return json({
         ok: true,
         configured: Boolean(env.TELEGRAM_BOT_TOKEN && env.TELEGRAM_CHAT_ID),
-        version: "lead-fast-2026-10-05",
+        version: "lead-fast-2026-10-06",
+        turnstile: Boolean(env.TURNSTILE_SECRET_KEY),
       }, 200, requestOrigin);
     }
 
@@ -309,9 +336,31 @@ export default {
       const site = String(form.get("site") || "Чисто Дома").trim();
       const city = String(form.get("city") || "Нефтеюганск").trim();
       const photo = form.get("photo");
+      const honeypot = String(form.get("website") || "").trim();
+      const turnstileRequired = String(form.get("turnstile_required") || "") === "1";
+      const turnstileToken = String(form.get("cf-turnstile-response") || "").trim();
+
+      if (honeypot) {
+        return json({ ok: false, error: "Invalid request" }, 400, requestOrigin);
+      }
 
       if (!phone) return json({ ok: false, error: "Phone is required" }, 400, requestOrigin);
       if (!(photo instanceof File)) return json({ ok: false, error: "Photo is required" }, 400, requestOrigin);
+
+      if (turnstileRequired) {
+        if (!turnstileToken) {
+          return json({ ok: false, error: "Bot protection check is required" }, 400, requestOrigin);
+        }
+        const verification = await verifyTurnstile(env, turnstileToken, request);
+        const hostnameOk =
+          !verification.hostname ||
+          verification.hostname === "chistodoma86.ru" ||
+          verification.hostname === "www.chistodoma86.ru";
+        if (!verification.success || !hostnameOk) {
+          console.warn("lead.turnstile_failed", { leadId, error_codes: verification["error-codes"] || [] });
+          return json({ ok: false, error: "Bot protection check failed" }, 403, requestOrigin);
+        }
+      }
       if (photo.size > 10 * 1024 * 1024) {
         return json({ ok: false, error: "Photo is larger than 10 MB" }, 400, requestOrigin);
       }
