@@ -473,7 +473,6 @@ document.getElementById('leadForm').addEventListener('submit',async e=>{
  if(!typeSelect.value){show('Выберите, что нужно почистить.','err');return}
  if(honeypot&&honeypot.value.trim()){show('Не удалось отправить заявку. Попробуйте ещё раз.','err');return}
  const form=e.currentTarget,data=new FormData(form);
- const smartToken=String(data.get('smart-token')||'').trim();
  if(!smartToken){show('Подтвердите проверку и попробуйте ещё раз.','err');return}
  data.set('site','Чисто Дома');data.set('city','Нефтеюганск');
  const btn=form.querySelector('button[type="submit"]');
