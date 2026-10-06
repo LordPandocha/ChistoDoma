@@ -1,5 +1,8 @@
 User-agent: *
 Allow: /
 
+Disallow: /telegram-worker/
+Disallow: /wrangler.jsonc
+
 
 Sitemap: https://chistodoma86.ru/sitemap.xml
