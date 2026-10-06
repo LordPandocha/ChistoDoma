@@ -67,6 +67,23 @@ footer{padding:25px 0 95px;background:#06101a;color:#8ea5bb;font-size:12px}.foot
 .section-head h2{text-wrap:balance}
 @media(max-width:620px){.hero:after{background-size:32px 32px}.hero-photo{animation:none}.hero-photo:before{display:none}}
 @media(prefers-reduced-motion:reduce){.hero:after,.hero-grid>div:first-child>*,.hero-photo,.hero-photo:before,.btn.primary:after,.head-btn:after,.darkband:after{animation:none!important}.motion-ready .service,.motion-ready .step,.motion-ready .compare,.motion-ready .review,.motion-ready .contact{opacity:1;transform:none;filter:none;transition:none!important}}</style>
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"LocalBusiness",
+  "name":"Чисто Дома",
+  "url":"https://chistodoma86.ru/",
+  "telephone":"+7 912 088-30-29",
+  "priceRange":"₽₽",
+  "description":"Химчистка диванов, кресел, стульев и матрасов с выездом на дом в Нефтеюганске.",
+  "areaServed":{"@type":"City","name":"Нефтеюганск"},
+  "serviceType":["Химчистка диванов","Химчистка кресел","Химчистка стульев","Химчистка матрасов"],
+  "sameAs":[
+    "https://vk.ru/chisto_doma_nft",
+    "https://max.ru/"
+  ]
+}
+</script>
 </head>
 <body>
 <header class="top"><div class="wrap nav">
@@ -84,7 +101,7 @@ footer{padding:25px 0 95px;background:#06101a;color:#8ea5bb;font-size:12px}.foot
 <div class="actions"><a class="btn primary" href="#contact"><svg class="ui-ico ui-icon-message" aria-hidden="true" viewBox="0 0 24 24"><path d="M20 11.5a7.5 7.5 0 0 1-8 7.4 8.6 8.6 0 0 1-4.1-1L4 19l1.2-3.2A7.2 7.2 0 0 1 4.5 12 7.5 7.5 0 0 1 12 4.5a7.5 7.5 0 0 1 8 7Z"/><path d="M8 12h.01M12 12h.01M16 12h.01"/></svg>Написать</a><a class="btn outline" href="tel:+79120883029"><svg class="ui-ico ui-icon-phone" aria-hidden="true" viewBox="0 0 24 24"><path d="M6.6 3.8 9 6.5 7.2 9.4c1.4 2.5 2.9 4 5.4 5.4l2.9-1.8 2.7 2.4c.5.4.6 1.2.2 1.8l-1.3 1.7c-.6.8-1.7 1.1-2.7.7C9 17.7 6.3 15 4.5 11.6c-.4-1-.1-2.1.7-2.7l1.7-1.3c.6-.4 1.4-.3 1.8.2Z"/></svg>Позвонить</a><a class="btn outline" href="ceny.html">Цены →</a></div>
 <div class="hero-points"><div class="hero-point"><b><svg class="ui-ico ui-icon-car" aria-hidden="true" viewBox="0 0 24 24"><path d="m5 11 1.5-4h11L19 11M4 11h16v6H4z"/><path d="M7 17v2M17 17v2M7 14h.01M17 14h.01"/></svg>Выезд по Нефтеюганску</b><span>Работаем у вас, без вывоза мебели.</span></div><div class="hero-point"><b><svg class="ui-ico ui-icon-check" aria-hidden="true" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></svg>Сначала проверяем материал</b><span>Проверяем реакцию ткани перед чисткой.</span></div><div class="hero-point"><b><svg class="ui-ico ui-icon-message" aria-hidden="true" viewBox="0 0 24 24"><path d="M20 11.5a7.5 7.5 0 0 1-8 7.4 8.6 8.6 0 0 1-4.1-1L4 19l1.2-3.2A7.2 7.2 0 0 1 4.5 12 7.5 7.5 0 0 1 12 4.5a7.5 7.5 0 0 1 8 7Z"/><path d="M8 12h.01M12 12h.01M16 12h.01"/></svg>Связь без лишних шагов</b><span>VK · Авито · MAX · телефон — выбирайте удобное.</span></div></div>
 </div>
-<div class="hero-photo"><img src="assets/hero-main-2026.jpg?v=20261006" alt="Современная гостиная с чистым диваном — Чисто Дома" fetchpriority="high"><div class="photo-label"><b>Чисто Дома</b><span>Нефтеюганск · выезд на дом</span></div></div>
+<div class="hero-photo"><img src="assets/hero-main-2026.jpg?v=20261006" alt="Современная гостиная с чистым диваном — Чисто Дома" width="560" height="520" decoding="async" fetchpriority="high"><div class="photo-label"><b>Чисто Дома</b><span>Нефтеюганск · выезд на дом</span></div></div>
 </div></section>
 
 <div class="darkband"><div class="wrap"><span>ДИВАНЫ</span><i>✦</i><span>КРЕСЛА</span><i>✦</i><span>СТУЛЬЯ</span><i>✦</i><span>МАТРАСЫ</span><i>✦</i><span>ВЫЕЗД НА ДОМ</span><i>✦</i><span>НЕФТЕЮГАНСК</span></div></div>
@@ -166,7 +183,7 @@ if(grid){
  const render=()=>{
   grid.textContent='';
   data.slice(0,shown).forEach(r=>{
-   const card=document.createElement('article');card.className='review';
+   const card=document.createElement('article');card.className='review is-visible';
    const top=document.createElement('div');top.className='review-top';
    const person=document.createElement('div');const name=document.createElement('div');name.className='review-name';name.textContent=r.name||'Клиент';const date=document.createElement('div');date.className='review-date';date.textContent=r.date||'';person.append(name,date);
    const stars=document.createElement('div');stars.className='stars';stars.textContent='★★★★★';stars.setAttribute('aria-label','5 из 5');
