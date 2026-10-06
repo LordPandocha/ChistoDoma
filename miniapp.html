@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#071d52">
 <meta name="robots" content="noindex, nofollow, noarchive">
 <title>Чисто Дома — заявка</title>
-<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+<script src="https://smartcaptcha.cloud.yandex.ru/captcha.js" defer></script>
 <script src="https://telegram.org/js/telegram-web-app.js?63"></script>
 <style>
 :root{
@@ -134,7 +134,7 @@ button:disabled{opacity:.6;cursor:wait}
           <input id="consent" type="checkbox" required>
           <span>Согласен на обработку указанных данных для связи по заявке.</span>
         </label>
-        <div id="turnstileBox" hidden style="min-height:0"></div>
+        <div id="smartCaptcha" class="smart-captcha" data-sitekey="" style="min-height:100px"></div>
         <button id="submit" type="submit">📸 Отправить заявку</button>
         <div id="status" class="status" role="status" aria-live="polite"></div>
       </div>
@@ -160,12 +160,10 @@ button:disabled{opacity:.6;cursor:wait}
   const fileName = document.getElementById('fileName');
   const status = document.getElementById('status');
   const submit = document.getElementById('submit');
-  const TURNSTILE_SITE_KEY = '0x4AAAAAAFPLL-xou3hoAHmV';
-  const turnstileBox = document.getElementById('turnstileBox');
-  let turnstileWidgetId = null;
   const phone = document.getElementById('phone');
+  const smartCaptcha = document.getElementById('smartCaptcha');
 
-  function show(msg, type) {
+  function show(msg,type) {
     status.textContent = msg;
     status.className = 'status show ' + type;
   }
@@ -194,45 +192,17 @@ button:disabled{opacity:.6;cursor:wait}
     phone.value = out;
   });
 
-
-  async function initTurnstile(){
-    if (!window.turnstile || !turnstileBox) {
-      throw new Error('Не удалось загрузить защиту от ботов');
-    }
-    turnstileBox.hidden = false;
-    turnstileWidgetId = window.turnstile.render(turnstileBox, {
-      sitekey: TURNSTILE_SITE_KEY,
-      theme: 'auto',
-      size: 'flexible',
-      action: 'lead'
-    });
-  }
-
-  (async function(){
-    const started = Date.now();
-    while (!window.turnstile && Date.now() - started < 10000) {
-      await new Promise(r => setTimeout(r, 100));
-    }
-    try { await initTurnstile(); }
-    catch (err) { show('⚠️ '+err.message, 'err'); }
-  })();
-
   form.addEventListener('submit', async function(e){
     e.preventDefault();
     const f = photo.files && photo.files[0];
     if (!f) return show('Добавьте фото мебели.', 'err');
 
     const data = new FormData(form);
-    if (!window.turnstile || turnstileWidgetId === null) {
-      show('Защита от ботов ещё загружается. Подождите пару секунд.', 'err');
+    const smartToken = String(data.get('smart-token') || '').trim();
+    if (!smartToken) {
+      show('Подтвердите проверку и попробуйте ещё раз.', 'err');
       return;
     }
-    const token = window.turnstile.getResponse(turnstileWidgetId);
-    if (!token) {
-      show('Подтвердите проверку защиты и попробуйте ещё раз.', 'err');
-      return;
-    }
-    data.set('cf-turnstile-response', token);
     data.set('site','Чисто Дома');
     data.set('city','Нефтеюганск');
 
@@ -246,23 +216,20 @@ button:disabled{opacity:.6;cursor:wait}
         headers:{'Accept':'application/json'}
       });
       const payload = await res.json().catch(function(){return {};});
-      if (!res.ok) throw new Error(payload.telegram_error || payload.error || 'Ошибка отправки');
+      if (!res.ok) throw new Error(payload.error || 'Ошибка отправки');
 
       form.reset();
       preview.classList.remove('on');
       show('✅ Заявка отправлена! Мы свяжемся с вами по указанному номеру.', 'ok');
-      if (window.turnstile && turnstileWidgetId !== null) window.turnstile.reset(turnstileWidgetId);
       if (tg && tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
     } catch (err) {
       show('⚠️ ' + (err.message || 'Не удалось отправить заявку.'), 'err');
-      if (window.turnstile && turnstileWidgetId !== null) window.turnstile.reset(turnstileWidgetId);
       if (tg && tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('error');
-    } finally {
+    } finally { 
       submit.disabled = false;
       submit.textContent = '📸 Отправить заявку';
     }
   });
-})();
 </script>
 </body>
 </html>
