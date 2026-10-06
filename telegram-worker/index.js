@@ -39,21 +39,21 @@ async function fetchWithTimeout(url, init, timeoutMs = 12000) {
   }
 }
 
-const TURNSTILE_VERIFY_URL = "https://challenges.cloudflare.com/turnstile/v0/siteverify";
+const SMARTCAPTCHA_VERIFY_URL = "https://smartcaptcha.cloud.yandex.ru/validate";
 
-async function verifyTurnstile(env, token, request) {
-  if (!env.TURNSTILE_SECRET) {
-    return { success: false, error: "Turnstile is not configured on the server" };
+async function verifySmartCaptcha(env, token, request) {
+  if (!env.YANDEX_SMARTCAPTCHA_SERVER_KEY) {
+    return { status: "error", message: "SmartCaptcha is not configured on the server" };
   }
 
   const body = new URLSearchParams();
-  body.set("secret", env.TURNSTILE_SECRET);
-  body.set("response", token);
+  body.set("secret", env.YANDEX_SMARTCAPTCHA_SERVER_KEY);
+  body.set("token", token);
   const remoteIp = request.headers.get("CF-Connecting-IP");
-  if (remoteIp) body.set("remoteip", remoteIp);
+  if (remoteIp) body.set("ip", remoteIp);
 
   const response = await fetchWithTimeout(
-    TURNSTILE_VERIFY_URL,
+    SMARTCAPTCHA_VERIFY_URL,
     {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
@@ -305,8 +305,8 @@ export default {
       return json({
         ok: true,
         configured: Boolean(env.TELEGRAM_BOT_TOKEN && env.TELEGRAM_CHAT_ID),
-        version: "lead-turnstile-2026-10-06",
-        turnstile: Boolean(env.TURNSTILE_SECRET),
+        version: "lead-smartcaptcha-2026-10-06",
+        smartcaptcha: Boolean(env.YANDEX_SMARTCAPTCHA_SERVER_KEY),
       }, 200, requestOrigin);
     }
 
@@ -337,7 +337,7 @@ export default {
       const city = String(form.get("city") || "Нефтеюганск").trim();
       const photo = form.get("photo");
       const honeypot = String(form.get("website") || "").trim();
-      const turnstileToken = String(form.get("cf-turnstile-response") || "").trim();
+      const smartToken = String(form.get("smart-token") || "").trim();
 
       if (honeypot) {
         return json({ ok: false, error: "Invalid request" }, 400, requestOrigin);
@@ -346,28 +346,25 @@ export default {
       if (!phone) return json({ ok: false, error: "Phone is required" }, 400, requestOrigin);
       if (!(photo instanceof File)) return json({ ok: false, error: "Photo is required" }, 400, requestOrigin);
 
-      if (!env.TURNSTILE_SECRET) {
-        console.error("lead.turnstile_not_configured", { leadId });
+      if (!env.YANDEX_SMARTCAPTCHA_SERVER_KEY) {
+        console.error("lead.smartcaptcha_not_configured", { leadId });
         return json({ ok: false, error: "Bot protection is not configured on the server" }, 503, requestOrigin);
       }
 
-      if (!turnstileToken) {
+      if (!smartToken) {
         return json({ ok: false, error: "Bot protection check is required" }, 400, requestOrigin);
       }
 
-      const verification = await verifyTurnstile(env, turnstileToken, request);
-      const hostnameOk =
-        verification.hostname === "chistodoma86.ru" ||
-        verification.hostname === "www.chistodoma86.ru";
-      const actionOk = verification.action === "lead";
+      const captcha = await verifySmartCaptcha(env, smartToken, request);
+      const host = String(captcha.host || "").toLowerCase();
+      const hostOk = host === "chistodoma86.ru" || host === "www.chistodoma86.ru";
 
-      if (!verification.success || !hostnameOk || !actionOk) {
-        console.warn("lead.turnstile_failed", {
+      if (captcha.status !== "ok" || !hostOk) {
+        console.warn("lead.smartcaptcha_failed", {
           leadId,
-          success: Boolean(verification.success),
-          hostname: verification.hostname || null,
-          action: verification.action || null,
-          error_codes: verification["error-codes"] || []
+          status: captcha.status || null,
+          host: captcha.host || null,
+          message: captcha.message || null
         });
         return json({ ok: false, error: "Bot protection check failed" }, 403, requestOrigin);
       }
