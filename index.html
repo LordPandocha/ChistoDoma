@@ -26,6 +26,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <meta name="twitter:card" content="summary_large_image">
 <title>Химчистка мебели в Нефтеюганске — Чисто Дома</title>
 <link rel="canonical" href="https://chistodoma86.ru/">
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 <style>
 :root{--bg:#020b20;--panel:#071936;--panel2:#0a2247;--blue:#2a8cff;--cyan:#55e9ff;--text:#f5f9ff;--mut:#9eb2d2;--line:rgba(116,190,255,.18);--glow:0 0 60px rgba(42,140,255,.18)}
 *{box-sizing:border-box}
@@ -461,32 +462,32 @@ function show(msg,type=''){status.textContent=msg;status.className='status show'
 photo.addEventListener('change',()=>{const f=photo.files&&photo.files[0];if(!f){preview.classList.remove('on');return}if(f.size>10*1024*1024){show('Фото больше 10 МБ. Выберите файл поменьше.','err');photo.value='';preview.classList.remove('on');return}fileName.textContent=f.name;previewImg.src=URL.createObjectURL(f);preview.classList.add('on')});
 const phone=document.getElementById('leadPhone');phone.addEventListener('input',()=>{const d=phone.value.replace(/\D/g,'').replace(/^8/,'7').slice(0,11);let o='+7';if(d.length>1)o+=' '+d.slice(1,4);if(d.length>=5)o+=' '+d.slice(4,7);if(d.length>=8)o+='-'+d.slice(7,9);if(d.length>=10)o+='-'+d.slice(9,11);phone.value=o});
 const LEAD_API_URL='https://api.chistodoma86.ru/api/lead';
-const TURNSTILE_SITE_KEY='';
+const TURNSTILE_SITE_KEY='0x4AAAAAAFPLL-xou3hoAHmV';
 
 let turnstileWidgetId=null;
-function loadTurnstile(){
-  if(window.turnstile) return Promise.resolve();
-  return new Promise((resolve,reject)=>{
-    const src='https://challenges.cloudflare.com/turnstile/v0/api.js';
-    const existing=document.querySelector('script[src="'+src+'"]');
-    if(existing){
-      existing.addEventListener('load',resolve,{once:true});
-      existing.addEventListener('error',()=>reject(new Error('Не удалось загрузить защиту от ботов')),{once:true});
-      return;
-    }
-    const script=document.createElement('script');
-    script.src=src;script.async=true;script.defer=true;
-    script.onload=resolve;script.onerror=()=>reject(new Error('Не удалось загрузить защиту от ботов'));
-    document.head.appendChild(script);
-  });
-}
+let turnstileWidgetId=null;
 async function initTurnstile(){
   if(!TURNSTILE_SITE_KEY||!turnstileBox) return;
   turnstileBox.hidden=false;
-  await loadTurnstile();
-  turnstileWidgetId=window.turnstile.render(turnstileBox,{sitekey:TURNSTILE_SITE_KEY,theme:'dark',size:'flexible'});
+  const waitForTurnstile=()=>{
+    if(window.turnstile) return Promise.resolve();
+    return new Promise((resolve,reject)=>{
+      const started=Date.now();
+      const timer=setInterval(()=>{
+        if(window.turnstile){clearInterval(timer);resolve();return}
+        if(Date.now()-started>10000){clearInterval(timer);reject(new Error('Не удалось загрузить защиту от ботов'))}
+      },100);
+    });
+  };
+  await waitForTurnstile();
+  turnstileWidgetId=window.turnstile.render(turnstileBox,{
+    sitekey:TURNSTILE_SITE_KEY,
+    theme:'auto',
+    size:'flexible',
+    action:'lead'
+  });
 }
-initTurnstile().catch(err=>console.warn('Turnstile:',err));
+initTurnstile().catch(err=>show('⚠️ '+err.message,'err'));
 
 async function fetchLeadWithTimeout(url, data, timeoutMs){
   const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),timeoutMs);
@@ -503,7 +504,6 @@ document.getElementById('leadForm').addEventListener('submit',async e=>{
  if(honeypot&&honeypot.value.trim()){show('Не удалось отправить заявку. Попробуйте ещё раз.','err');return}
  const form=e.currentTarget,data=new FormData(form);
  data.set('site','Чисто Дома');data.set('city','Нефтеюганск');
- data.set('turnstile_required',TURNSTILE_SITE_KEY?'1':'0');
  if(TURNSTILE_SITE_KEY){
    if(!window.turnstile||turnstileWidgetId===null){show('Защита от ботов ещё загружается. Подождите пару секунд.','err');return}
    const token=window.turnstile.getResponse(turnstileWidgetId);
