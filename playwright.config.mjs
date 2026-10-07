@@ -22,7 +22,7 @@ export default defineConfig({
     trace: 'retain-on-failure',
   },
   webServer: {
-    command: 'npx -y serve@14.2.4 . -l 4173 --no-clipboard',
+    command: 'node scripts/static-server.mjs',
     url: 'http://127.0.0.1:4173',
     reuseExistingServer: false,
     timeout: 30000,
