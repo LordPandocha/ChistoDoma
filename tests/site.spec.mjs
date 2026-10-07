@@ -69,13 +69,13 @@ test.describe('Chisto Doma cross-browser audit', () => {
         return {
           scrollHeight: scroller.scrollHeight,
           clientHeight: scroller.clientHeight,
-          maxScrollY: Math.max(0, scroller.scrollHeight - scroller.clientHeight),
+          bodyOverflowX: getComputedStyle(document.body).overflowX,
+          htmlOverflowX: getComputedStyle(document.documentElement).overflowX,
         };
       });
       expect(scrollMetrics.scrollHeight).toBeGreaterThanOrEqual(scrollMetrics.clientHeight);
-      if (scrollMetrics.maxScrollY > 0) {
-        expect(scrollMetrics.maxScrollY).toBeGreaterThan(0);
-      }
+      expect(['visible','clip','hidden']).toContain(scrollMetrics.bodyOverflowX);
+      expect(['visible','clip','hidden']).toContain(scrollMetrics.htmlOverflowX);
 
       expect(badResponses, `HTTP errors on ${path}: ${JSON.stringify(badResponses)}`).toEqual([]);
     });
