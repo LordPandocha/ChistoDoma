@@ -53,16 +53,16 @@ test.describe('Chisto Doma cross-browser audit', () => {
         expect(heroInfo.backgroundImage).toContain('hero-home.webp');
       }
 
-      await page.evaluate(() => window.scrollTo({ top: 0, behavior: 'auto' }));
-      await page.waitForTimeout(100);
-      await page.evaluate(() => window.scrollBy(0, Math.min(700, document.documentElement.scrollHeight)));
-      await page.waitForTimeout(250);
-
-      const afterScroll = await page.evaluate(() => ({
-        scrollY: window.scrollY,
-        rootScrollTop: document.scrollingElement?.scrollTop || 0,
-        maxScrollY: Math.max(0, document.documentElement.scrollHeight - window.innerHeight),
-      }));
+      const afterScroll = await page.evaluate(() => {
+        const scroller = document.scrollingElement || document.documentElement;
+        const maxScrollY = Math.max(0, scroller.scrollHeight - scroller.clientHeight);
+        scroller.scrollTop = Math.min(700, maxScrollY);
+        return {
+          scrollY: window.scrollY,
+          rootScrollTop: scroller.scrollTop,
+          maxScrollY,
+        };
+      });
       const effectiveScroll = Math.max(afterScroll.scrollY, afterScroll.rootScrollTop);
       if (afterScroll.maxScrollY > 0) {
         expect(effectiveScroll).toBeGreaterThan(0);
