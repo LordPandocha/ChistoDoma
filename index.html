@@ -47,7 +47,7 @@ footer{padding:25px 0 95px;background:#06101a;color:#8ea5bb;font-size:12px}.foot
 @keyframes shineSweep{0%{transform:translateX(-140%) skewX(-18deg)}55%,100%{transform:translateX(180%) skewX(-18deg)}}
 @keyframes pulseGlow{0%,100%{opacity:.38;transform:scale(1)}50%{opacity:.65;transform:scale(1.04)}}
 @keyframes scanLine{0%{background-position:0 -80px}100%{background-position:0 520px}}
-.hero:after{content:"";position:absolute;inset:0;pointer-events:none;opacity:.34;background-image:linear-gradient(rgba(105,221,255,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(105,221,255,.07) 1px,transparent 1px);background-size:42px 42px;mask-image:linear-gradient(to right,rgba(0,0,0,.85),transparent 75%)}
+
 .btn.primary{position:relative;overflow:hidden}
 .btn.primary:after,.head-btn:after{display:none!important;animation:none!important}.btn.primary,.head-btn{background:linear-gradient(145deg,#5fe6ff 0%,#25bde7 45%,#1688ff 100%);box-shadow:0 14px 34px rgba(22,136,255,.22),inset 0 1px 0 rgba(255,255,255,.34);transition:transform .22s ease,box-shadow .22s ease,filter .22s ease}.btn.primary:hover,.head-btn:hover{filter:saturate(1.08);transform:translateY(-3px);box-shadow:0 20px 42px rgba(22,136,255,.28),inset 0 1px 0 rgba(255,255,255,.42)}
 
@@ -68,13 +68,6 @@ footer{padding:25px 0 95px;background:#06101a;color:#8ea5bb;font-size:12px}.foot
 /* design+motion layer */
 .hero h1 span{background:linear-gradient(90deg,#58e7ff,#7aa8ff);-webkit-background-clip:text;background-clip:text;color:transparent}
 .hero-orb{position:absolute;border-radius:50%;filter:blur(70px);opacity:.45;pointer-events:none;animation:orb 14s ease-in-out infinite alternate}
-.hero-orb.a{width:420px;height:420px;right:-90px;top:-70px;background:#1688ff}
-.hero-orb.b{width:340px;height:340px;left:-70px;bottom:-90px;background:#4de2ff;animation-delay:-6s}
-@keyframes orb{to{transform:translate3d(-40px,30px,0) scale(1.15)}}
-.hero-card{position:absolute;right:0;top:48px;width:min(430px,38%);padding:10px;border-radius:30px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.2);box-shadow:0 30px 90px rgba(0,0,0,.4);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);animation:cardFloat 7s ease-in-out infinite}
-.hero-card img{width:100%;height:auto;border-radius:22px}
-.hero-card div{padding:12px 8px 4px;color:#fff}.hero-card b{display:block;font-size:15px}.hero-card span{font-size:12px;color:#a9c4da}
-@keyframes cardFloat{50%{transform:translate3d(0,-10px,0)}}
 .service,.contact,.step{transition:transform .25s ease,box-shadow .25s ease}
 .service:hover,.contact:hover{transform:translateY(-6px);box-shadow:0 26px 60px rgba(7,17,27,.18)}
 .btn.primary:hover,.head-btn:hover{transform:translateY(-2px) scale(1.02)}
