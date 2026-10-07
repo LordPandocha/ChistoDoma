@@ -47,7 +47,7 @@ jobs:
           node-version: 22
 
       - name: Install Playwright
-        run: npm install --no-save @playwright/test@1.55.0
+        run: npm install --no-save @playwright/test@1.63.0
 
       - name: Install browser
         shell: bash
