@@ -20,7 +20,6 @@
 <meta name="twitter:card" content="summary_large_image">
 <title>Чисто Дома — химчистка мебели в Нефтеюганске</title>
 <link rel="preload" as="image" href="assets/hero-home.webp" fetchpriority="high" media="(min-width:701px)">
-<link rel="preload" as="image" href="assets/hero-home-m.webp" fetchpriority="high" media="(max-width:700px)">
 <link rel="canonical" href="https://chistodoma86.ru/">
 <link rel="icon" href="/assets/logo.png" type="image/png" sizes="188x188">
 <link rel="shortcut icon" href="/assets/logo.png" type="image/png">
@@ -45,13 +44,10 @@ footer{padding:25px 0 95px;background:#06101a;color:#8ea5bb;font-size:12px}.foot
 @media(max-width:620px){.wrap{width:min(100% - 22px,1180px)}.nav{height:64px}.brand span{font-size:16px}.head-btn{padding:10px 13px;font-size:12px}.hero{min-height:760px;padding:104px 0 55px;background-position:68% center}.hero-grid{min-height:600px}.hero-grid>div:first-child{width:100%;padding-top:36px}.hero h1{font-size:45px}.hero p{font-size:16px}.hero-points{grid-template-columns:1fr}.hero-photo,.hero-photo img{min-height:300px;height:300px;border-radius:24px}.section{padding:68px 0}.section-head{display:block}.section-head p{margin-top:9px}.services,.steps,.prices,.gallery,.review-grid,.contact-links{grid-template-columns:1fr}.contact-intro{padding:23px}.contact{min-height:106px;padding:15px}.contact-icon{width:70px;height:70px}.contact-icon img{width:100%;height:100%;object-fit:cover}.contact-actions .btn{min-width:0}.price-card{min-height:145px}.actions .btn{width:100%}.mobile{position:fixed;display:flex;left:10px;right:10px;bottom:10px;z-index:60;gap:6px;padding:6px;border:1px solid rgba(255,255,255,.12);border-radius:17px;background:rgba(5,13,20,.96)}.mobile a{flex:1;text-align:center;padding:12px 8px;border-radius:12px;color:#fff;font-size:12px;font-weight:950}.mobile a:first-child{background:linear-gradient(135deg,var(--cyan),var(--blue));color:#04101a}}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
 .ui-ico{width:18px;height:18px;display:inline-block;vertical-align:-4px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;flex:none}.ui-ico.service-ui{width:28px;height:28px}.ui-ico.compare-ui{width:20px;height:20px}.ui-ico.arrow-ui,.ui-ico.external-ui{width:15px;height:15px}.btn,.head-btn,.mobile a{display:inline-flex;align-items:center;justify-content:center;gap:8px}.service-icon{display:grid;place-items:center}.hero-point b{display:flex;align-items:center;gap:8px}.icon-sprite{position:absolute;inline-size:0;block-size:0;overflow:hidden}.hero-actions .ui-ico,.actions .ui-ico{width:17px;height:17px}.service-icon{width:58px;height:58px;border-radius:18px;background:linear-gradient(145deg,#eaf7fb,#d8eef5);color:#0a7193;border:1px solid #c6e7ef}.handle{display:grid;place-items:center}.handle .compare-ui{color:#082a43}.hero-point b{font-size:13px}/* Magic UI-inspired motion layer: blur/fade, grid glow, shimmer, magnetic hover */ 
-@keyframes heroGridShift{0%{background-position:0 0,0 0}100%{background-position:42px 42px,-42px -42px}}
 @keyframes shineSweep{0%{transform:translateX(-140%) skewX(-18deg)}55%,100%{transform:translateX(180%) skewX(-18deg)}}
-@keyframes floatPhoto{0%,100%{transform:translate3d(0,0,0) scale(1)}50%{transform:translate3d(0,-4px,0) scale(1.002)}}
 @keyframes pulseGlow{0%,100%{opacity:.38;transform:scale(1)}50%{opacity:.65;transform:scale(1.04)}}
 @keyframes scanLine{0%{background-position:0 -80px}100%{background-position:0 520px}}
 .hero:after{content:"";position:absolute;inset:0;pointer-events:none;opacity:.34;background-image:linear-gradient(rgba(105,221,255,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(105,221,255,.07) 1px,transparent 1px);background-size:42px 42px;mask-image:linear-gradient(to right,rgba(0,0,0,.85),transparent 75%)}
-@keyframes magicBlurFade{0%{opacity:0;filter:blur(10px);transform:translateY(18px)}100%{opacity:1;filter:blur(0);transform:translateY(0)}}
 .btn.primary{position:relative;overflow:hidden}
 .btn.primary:after,.head-btn:after{display:none!important;animation:none!important}.btn.primary,.head-btn{background:linear-gradient(145deg,#5fe6ff 0%,#25bde7 45%,#1688ff 100%);box-shadow:0 14px 34px rgba(22,136,255,.22),inset 0 1px 0 rgba(255,255,255,.34);transition:transform .22s ease,box-shadow .22s ease,filter .22s ease}.btn.primary:hover,.head-btn:hover{filter:saturate(1.08);transform:translateY(-3px);box-shadow:0 20px 42px rgba(22,136,255,.28),inset 0 1px 0 rgba(255,255,255,.42)}
 
@@ -86,8 +82,6 @@ footer{padding:25px 0 95px;background:#06101a;color:#8ea5bb;font-size:12px}.foot
 @keyframes ring{0%{box-shadow:0 0 0 0 rgba(77,226,255,.55)}100%{box-shadow:0 0 0 18px rgba(77,226,255,0)}}
 .top:after{content:"";position:absolute;left:0;right:0;bottom:0;height:3px;background:linear-gradient(90deg,#4de2ff,#1688ff);transform:scaleX(0);transform-origin:0 50%;animation:prog linear both;animation-timeline:scroll()}
 @keyframes prog{to{transform:scaleX(1)}}
-@media(max-width:900px){.hero-card{display:none}}
-@media(max-width:620px){.hero-orb{animation:none;filter:blur(45px)}}
 @media(prefers-reduced-motion:reduce){.hero-orb,.hero-card,.compare .handle,.top:after{animation:none!important}}
 .hero:before{background:linear-gradient(90deg,rgba(3,8,13,.84) 0%,rgba(3,8,13,.68) 34%,rgba(3,8,13,.30) 64%,rgba(3,8,13,.12) 100%),linear-gradient(0deg,rgba(3,8,13,.45),transparent 50%)}.hero-orb{opacity:.22}@media(max-width:700px){.hero{background-image:url('assets/hero-home.webp');background-position:62% center}.hero:before{background:linear-gradient(180deg,rgba(3,8,13,.78),rgba(3,8,13,.66))}}.toast{position:fixed;left:50%;bottom:calc(90px + env(safe-area-inset-bottom,0px));transform:translate(-50%,20px);opacity:0;z-index:90;padding:12px 18px;border-radius:14px;background:#07101a;color:#fff;font-size:14px;font-weight:800;box-shadow:0 14px 40px rgba(0,0,0,.35);transition:.3s;pointer-events:none;max-width:90vw;text-align:center}.toast.show{opacity:1;transform:translate(-50%,0)}
 
