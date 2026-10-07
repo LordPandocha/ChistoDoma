@@ -1,0 +1,68 @@
+name: Cross-browser site audit
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  browser-audit:
+    name: ${{ matrix.os }} / ${{ matrix.engine }} / ${{ matrix.viewport }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            engine: chromium
+            viewport: desktop
+          - os: ubuntu-latest
+            engine: firefox
+            viewport: desktop
+          - os: ubuntu-latest
+            engine: webkit
+            viewport: desktop
+          - os: windows-latest
+            engine: chromium
+            viewport: desktop
+          - os: macos-latest
+            engine: webkit
+            viewport: desktop
+          - os: ubuntu-latest
+            engine: chromium
+            viewport: android
+          - os: ubuntu-latest
+            engine: webkit
+            viewport: ios
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install Playwright
+        run: npm install --no-save @playwright/test@1.55.0
+
+      - name: Install browser
+        shell: bash
+        run: npx playwright install ${{ matrix.engine }} ${{ matrix.os == 'ubuntu-latest' && '--with-deps' || '' }}
+
+      - name: Run site audit
+        env:
+          PW_ENGINE: ${{ matrix.engine }}
+          PW_VIEWPORT: ${{ matrix.viewport }}
+        run: npx playwright test
+
+      - name: Upload screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: browser-audit-${{ matrix.os }}-${{ matrix.engine }}-${{ matrix.viewport }}
+          path: test-results/
+          if-no-files-found: ignore
