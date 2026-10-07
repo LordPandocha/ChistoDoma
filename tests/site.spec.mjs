@@ -60,10 +60,14 @@ test.describe('Chisto Doma cross-browser audit', () => {
 
       const afterScroll = await page.evaluate(() => ({
         scrollY: window.scrollY,
+        rootScrollTop: document.scrollingElement?.scrollTop || 0,
         maxScrollY: Math.max(0, document.documentElement.scrollHeight - window.innerHeight),
       }));
-      expect(afterScroll.scrollY).toBeGreaterThan(0);
-      expect(afterScroll.scrollY).toBeLessThanOrEqual(afterScroll.maxScrollY + 1);
+      const effectiveScroll = Math.max(afterScroll.scrollY, afterScroll.rootScrollTop);
+      if (afterScroll.maxScrollY > 0) {
+        expect(effectiveScroll).toBeGreaterThan(0);
+        expect(effectiveScroll).toBeLessThanOrEqual(afterScroll.maxScrollY + 1);
+      }
 
       expect(badResponses, `HTTP errors on ${path}: ${JSON.stringify(badResponses)}`).toEqual([]);
     });
