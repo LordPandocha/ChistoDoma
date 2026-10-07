@@ -40,17 +40,28 @@ test.describe('Chisto Doma cross-browser audit', () => {
         await expect(hero).toBeVisible();
 
         const heroInfo = await hero.evaluate(el => {
-          const s = getComputedStyle(el);
+          const image = el.querySelector('.hero-bg');
+          const s = image ? getComputedStyle(image) : null;
           const r = el.getBoundingClientRect();
           return {
             height: r.height,
-            backgroundImage: s.backgroundImage,
-            overflow: s.overflow,
+            imagePresent: !!image,
+            imageComplete: !!image?.complete,
+            naturalWidth: image?.naturalWidth || 0,
+            naturalHeight: image?.naturalHeight || 0,
+            position: s?.position || '',
+            objectFit: s?.objectFit || '',
+            zIndex: s?.zIndex || '',
           };
         });
 
         expect(heroInfo.height).toBeGreaterThanOrEqual(Math.min(layout.clientHeight, 500));
-        expect(heroInfo.backgroundImage).toContain('hero-home.webp');
+        expect(heroInfo.imagePresent).toBe(true);
+        expect(heroInfo.imageComplete).toBe(true);
+        expect(heroInfo.naturalWidth).toBeGreaterThan(0);
+        expect(heroInfo.naturalHeight).toBeGreaterThan(0);
+        expect(heroInfo.position).toBe('absolute');
+        expect(heroInfo.objectFit).toBe('cover');
       }
 
       const footer = page.locator('footer');
