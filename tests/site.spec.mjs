@@ -39,7 +39,7 @@ test.describe('Chisto Doma cross-browser audit', () => {
         const hero = page.locator('.hero');
         await expect(hero).toBeVisible();
         const heroImage = hero.locator('.hero-bg');
-        await expect(heroImage).toHaveAttribute('src', 'assets/hero-home.jpg');
+        await expect(heroImage).toHaveAttribute('src', 'hero-home.webp?v=20261007');
         await expect.poll(async () => heroImage.evaluate(img => ({ complete: img.complete, naturalWidth: img.naturalWidth, naturalHeight: img.naturalHeight }))).toMatchObject({ complete: true });
         await heroImage.evaluate(async img => { await img.decode(); });
 
