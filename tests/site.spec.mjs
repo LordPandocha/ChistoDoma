@@ -38,10 +38,14 @@ test.describe('Chisto Doma cross-browser audit', () => {
       if (path === '/') {
         const hero = page.locator('.hero');
         await expect(hero).toBeVisible();
+        const heroImage = hero.locator('.hero-bg');
+        await expect(heroImage).toHaveAttribute('src', 'assets/hero-home.webp');
+        await expect.poll(async () => heroImage.evaluate(img => ({ complete: img.complete, naturalWidth: img.naturalWidth, naturalHeight: img.naturalHeight }))).toMatchObject({ complete: true });
+        await heroImage.evaluate(async img => { await img.decode(); });
 
         const heroInfo = await hero.evaluate(el => {
           const image = el.querySelector('.hero-bg');
-          const s = image ? getComputedStyle(image) : null;
+          const cs = image ? getComputedStyle(image) : null;
           const r = el.getBoundingClientRect();
           return {
             height: r.height,
@@ -49,9 +53,9 @@ test.describe('Chisto Doma cross-browser audit', () => {
             imageComplete: !!image?.complete,
             naturalWidth: image?.naturalWidth || 0,
             naturalHeight: image?.naturalHeight || 0,
-            position: s?.position || '',
-            objectFit: s?.objectFit || '',
-            zIndex: s?.zIndex || '',
+            position: cs?.position || '',
+            objectFit: cs?.objectFit || '',
+            zIndex: cs?.zIndex || '',
           };
         });
 
