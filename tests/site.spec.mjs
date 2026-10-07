@@ -53,14 +53,17 @@ test.describe('Chisto Doma cross-browser audit', () => {
         expect(heroInfo.backgroundImage).toContain('hero-home.webp');
       }
 
+      const footer = page.locator('footer');
+      if (await footer.count()) {
+        await footer.scrollIntoViewIfNeeded();
+        await page.waitForTimeout(100);
+      }
       const afterScroll = await page.evaluate(() => {
         const scroller = document.scrollingElement || document.documentElement;
-        const maxScrollY = Math.max(0, scroller.scrollHeight - scroller.clientHeight);
-        scroller.scrollTop = Math.min(700, maxScrollY);
         return {
           scrollY: window.scrollY,
           rootScrollTop: scroller.scrollTop,
-          maxScrollY,
+          maxScrollY: Math.max(0, scroller.scrollHeight - scroller.clientHeight),
         };
       });
       const effectiveScroll = Math.max(afterScroll.scrollY, afterScroll.rootScrollTop);
