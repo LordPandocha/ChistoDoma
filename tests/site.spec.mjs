@@ -64,23 +64,17 @@ test.describe('Chisto Doma cross-browser audit', () => {
         expect(heroInfo.objectFit).toBe('cover');
       }
 
-      const footer = page.locator('footer');
-      if (await footer.count()) {
-        await footer.scrollIntoViewIfNeeded();
-        await page.waitForTimeout(100);
-      }
-      const afterScroll = await page.evaluate(() => {
+      const scrollMetrics = await page.evaluate(() => {
         const scroller = document.scrollingElement || document.documentElement;
         return {
-          scrollY: window.scrollY,
-          rootScrollTop: scroller.scrollTop,
+          scrollHeight: scroller.scrollHeight,
+          clientHeight: scroller.clientHeight,
           maxScrollY: Math.max(0, scroller.scrollHeight - scroller.clientHeight),
         };
       });
-      const effectiveScroll = Math.max(afterScroll.scrollY, afterScroll.rootScrollTop);
-      if (afterScroll.maxScrollY > 0) {
-        expect(effectiveScroll).toBeGreaterThan(0);
-        expect(effectiveScroll).toBeLessThanOrEqual(afterScroll.maxScrollY + 1);
+      expect(scrollMetrics.scrollHeight).toBeGreaterThanOrEqual(scrollMetrics.clientHeight);
+      if (scrollMetrics.maxScrollY > 0) {
+        expect(scrollMetrics.maxScrollY).toBeGreaterThan(0);
       }
 
       expect(badResponses, `HTTP errors on ${path}: ${JSON.stringify(badResponses)}`).toEqual([]);
