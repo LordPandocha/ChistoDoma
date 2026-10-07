@@ -93,7 +93,14 @@ footer{padding:25px 0 95px;background:#06101a;color:#8ea5bb;font-size:12px}.foot
 @media(max-width:900px){.hero-card{display:none}}
 @media(max-width:620px){.hero-orb{animation:none;filter:blur(45px)}}
 @media(prefers-reduced-motion:reduce){.hero-orb,.hero-card,.compare .handle,.top:after{animation:none!important}}
-.hero:before{background:linear-gradient(90deg,rgba(3,8,13,.84) 0%,rgba(3,8,13,.68) 34%,rgba(3,8,13,.30) 64%,rgba(3,8,13,.12) 100%),linear-gradient(0deg,rgba(3,8,13,.45),transparent 50%)}.hero-orb{opacity:.22}@media(max-width:700px){.hero{background-image:url('assets/hero-home-m.webp')}.hero:before{background:linear-gradient(180deg,rgba(3,8,13,.78),rgba(3,8,13,.66))}}.toast{position:fixed;left:50%;bottom:calc(90px + env(safe-area-inset-bottom,0px));transform:translate(-50%,20px);opacity:0;z-index:90;padding:12px 18px;border-radius:14px;background:#07101a;color:#fff;font-size:14px;font-weight:800;box-shadow:0 14px 40px rgba(0,0,0,.35);transition:.3s;pointer-events:none;max-width:90vw;text-align:center}.toast.show{opacity:1;transform:translate(-50%,0)}
+.hero:before{background:linear-gradient(90deg,rgba(3,8,13,.84) 0%,rgba(3,8,13,.68) 34%,rgba(3,8,13,.30) 64%,rgba(3,8,13,.12) 100%),linear-gradient(0deg,rgba(3,8,13,.45),transparent 50%)}.hero-orb{opacity:.22}@media(max-width:700px){.hero{background-image:url('assets/hero-home.webp');background-position:62% center}.hero:before{background:linear-gradient(180deg,rgba(3,8,13,.78),rgba(3,8,13,.66))}}.toast{position:fixed;left:50%;bottom:calc(90px + env(safe-area-inset-bottom,0px));transform:translate(-50%,20px);opacity:0;z-index:90;padding:12px 18px;border-radius:14px;background:#07101a;color:#fff;font-size:14px;font-weight:800;box-shadow:0 14px 40px rgba(0,0,0,.35);transition:.3s;pointer-events:none;max-width:90vw;text-align:center}.toast.show{opacity:1;transform:translate(-50%,0)}
+
+/* Hero stability: fixed supplied photo, no floating/jumping layers */
+.hero{background-image:url('assets/hero-home.webp')!important;background-position:62% center!important;background-size:cover!important;background-repeat:no-repeat!important}
+.hero:after,.hero-orb,.hero-card{display:none!important;animation:none!important;transform:none!important}
+.hero-grid>div:first-child>*{opacity:1!important;transform:none!important;filter:none!important;animation:none!important}
+@media(max-width:700px){.hero{background-image:url('assets/hero-home.webp')!important;background-position:62% center!important}}
+@media(prefers-reduced-motion:reduce){.hero,.hero-grid>div:first-child>*{animation:none!important;transition:none!important}}
 </style>
 <script type="application/ld+json">
 {
@@ -120,7 +127,7 @@ footer{padding:25px 0 95px;background:#06101a;color:#8ea5bb;font-size:12px}.foot
 </div></header>
 
 <main>
-<section class="hero"><span class="hero-orb a" aria-hidden="true"></span><span class="hero-orb b" aria-hidden="true"></span><div class="wrap hero-grid">
+<section class="hero"><div class="wrap hero-grid">
 <div>
 <div class="eyebrow">Нефтеюганск · выезд на дом</div>
 <h1>Профессиональная химчистка мебели <span>на дому.</span></h1>
@@ -129,7 +136,7 @@ footer{padding:25px 0 95px;background:#06101a;color:#8ea5bb;font-size:12px}.foot
 <div class="hero-points"><div class="hero-point"><b><svg class="ui-ico ui-icon-car" aria-hidden="true" viewBox="0 0 24 24"><path d="m5 11 1.5-4h11L19 11M4 11h16v6H4z"/><path d="M7 17v2M17 17v2M7 14h.01M17 14h.01"/></svg>Выезд по Нефтеюганску</b><span>Работаем у вас, без вывоза мебели.</span></div><div class="hero-point"><b><svg class="ui-ico ui-icon-check" aria-hidden="true" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></svg>Сначала проверяем материал</b><span>Проверяем реакцию ткани перед чисткой.</span></div><div class="hero-point"><b><svg class="ui-ico ui-icon-message" aria-hidden="true" viewBox="0 0 24 24"><path d="M20 11.5a7.5 7.5 0 0 1-8 7.4 8.6 8.6 0 0 1-4.1-1L4 19l1.2-3.2A7.2 7.2 0 0 1 4.5 12 7.5 7.5 0 0 1 12 4.5a7.5 7.5 0 0 1 8 7Z"/><path d="M8 12h.01M12 12h.01M16 12h.01"/></svg>Связь без лишних шагов</b><span>VK · Авито · MAX · телефон — выбирайте удобное.</span></div></div>
 </div>
 
-<aside class="hero-card"><img src="chairs-duo.jpg" alt="Стулья до и после химчистки: слева до, справа после" width="904" height="562" decoding="async"><div><b>Стулья: до → после</b><span>реальная работа в Нефтеюганске</span></div></aside>
+
 </div></section>
 
 <div class="darkband"><div class="wrap"><span>ДИВАНЫ</span><i>✦</i><span>КРЕСЛА</span><i>✦</i><span>СТУЛЬЯ</span><i>✦</i><span>МАТРАСЫ</span><i>✦</i><span>ВЫЕЗД НА ДОМ</span><i>✦</i><span>НЕФТЕЮГАНСК</span></div></div>
