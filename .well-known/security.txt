@@ -1,0 +1,4 @@
+Contact: mailto:riaboshapkaivan2030@gmail.com
+Preferred-Languages: ru, en
+Canonical: https://chistodoma86.ru/.well-known/security.txt
+Expires: 2027-10-06T00:00:00Z
