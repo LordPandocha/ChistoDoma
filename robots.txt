@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://chistodoma86.ru/sitemap.xml
