@@ -1,0 +1,117 @@
+/* ChistoDoma: readable supporting typography. Layout, colors, and interactions remain unchanged. */
+:where(.kicker, .eyebrow) {
+  font-size: 12.5px !important;
+  line-height: 1.45 !important;
+}
+
+.links {
+  font-size: 14px !important;
+}
+
+.hero-point b,
+.mobile-action b {
+  font-size: 14px !important;
+}
+
+.hero-point span,
+.photo-label span,
+.darkband .wrap,
+.step span,
+.service .price,
+.price-card span,
+.contact span,
+.contact strong,
+.contact-note,
+.trust-card span,
+.trust-card a,
+.trust-foot,
+.trust-head > p,
+.mobile a,
+.price span,
+.price a,
+.item span,
+.stamp span,
+.feature span,
+.mut,
+.price-label,
+.floating-home,
+.contact > span:last-child > span,
+.contact > span:last-child > strong {
+  font-size: 14px !important;
+  line-height: 1.5 !important;
+}
+
+.service p,
+.review p,
+.faq p {
+  font-size: 15px !important;
+  line-height: 1.7 !important;
+}
+
+.price-card small,
+.contact .channel,
+.labels span,
+.review-date,
+.review-service,
+.review-source,
+.mobile-action small,
+.chair-real-note,
+.screen .bar,
+.profile .sub,
+.band {
+  font-size: 12.5px !important;
+  line-height: 1.45 !important;
+}
+
+.price small {
+  font-size: 13.5px !important;
+}
+
+.top .nav > .btn,
+.head-btn,
+.back-home,
+.back,
+.actions .btn {
+  font-size: 14px !important;
+}
+
+.contact .channel {
+  font-size: 12.5px !important;
+}
+
+.contact-note {
+  font-size: 13.5px !important;
+}
+
+.footer,
+footer {
+  font-size: 13px !important;
+  line-height: 1.6 !important;
+}
+
+.review-name,
+.feature b {
+  font-size: 15px !important;
+}
+
+@media (max-width: 600px) {
+  .hero-point span,
+  .photo-label span,
+  .price-card span,
+  .contact span,
+  .contact strong,
+  .trust-card span,
+  .trust-card a,
+  .item span,
+  .feature span,
+  .mut,
+  .price-label {
+    font-size: 13.5px !important;
+  }
+
+  .service p,
+  .review p,
+  .faq p {
+    font-size: 15px !important;
+  }
+}
