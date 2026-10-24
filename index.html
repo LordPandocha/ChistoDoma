@@ -559,7 +559,7 @@ if(grid&&more&&dataEl){
    grid.replaceChildren(frag);
    more.hidden = shown>=data.length;
  };
- more.addEventListener('click',()=>{shown=Math.min(shown+6,data.length);render();more.scrollIntoView({block:'nearest',behavior:'smooth'});});
+ more.addEventListener('click',()=>{shown=Math.min(shown+6,data.length);render();more.scrollIntoView({block:'nearest',behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});});
  render();
 } 
 </script>
