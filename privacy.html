@@ -30,7 +30,11 @@ a{color:#70e8ff;overflow-wrap:anywhere;word-break:break-word}
 main{position:relative;z-index:1;padding:70px 0 90px}
 .kicker{font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:900;color:#72e8ff}
 h1{font-size:clamp(34px,6vw,58px);line-height:1.03;letter-spacing:-.04em;margin:10px 0 12px;overflow-wrap:anywhere;word-break:break-word}
-.lead{color:var(--mut);margin:0 0 32px}
+.lead{color:var(--mut);margin:0 0 22px}
+.operator-card{display:flex;align-items:center;gap:16px;margin:0 0 30px;padding:18px 22px;border:1px solid rgba(82,220,255,.24);border-radius:20px;background:linear-gradient(120deg,rgba(42,140,255,.15),rgba(85,233,255,.05));box-shadow:0 12px 36px rgba(0,0,0,.14)}
+.operator-card__mark{display:grid;place-items:center;flex:0 0 44px;width:44px;height:44px;border-radius:14px;background:rgba(85,233,255,.12);color:var(--cyan);font-size:22px;font-weight:900}
+.operator-card__label{display:block;color:#8bcbe6;font-size:11px;font-weight:900;letter-spacing:.12em;text-transform:uppercase;line-height:1.3}
+.operator-card strong{display:block;margin-top:4px;color:#fff;font-size:17px;line-height:1.35}
 .card{padding:28px;border:1px solid var(--line);border-radius:26px;background:linear-gradient(145deg,rgba(10,31,64,.96),rgba(4,16,36,.96));box-shadow:0 18px 54px rgba(0,0,0,.2)}
 h2{font-size:23px;margin:28px 0 8px;overflow-wrap:anywhere;word-break:break-word}
 h2:first-child{margin-top:0}
@@ -67,10 +71,11 @@ footer{position:relative;z-index:1;padding:24px 0;color:#8ea4c6;font-size:12px;b
     <div class="kicker">Документ</div>
     <h1>Политика конфиденциальности</h1>
     <p class="lead">На сайте нет формы заявки и загрузки фотографий. Для связи используются телефон, ВКонтакте, Авито и MAX.</p>
+    <div class="operator-card"><span class="operator-card__mark" aria-hidden="true">К</span><div><span class="operator-card__label">Владелец сайта и оператор</span><strong>Григоров Константин Владимирович</strong></div></div>
 
     <article class="card">
       <h2>1. Какие данные собираются через сайт</h2>
-      <p>Владелец сайта — Константин. На сайте «Чисто Дома» нет формы заявки, регистрации и загрузки фотографий. Номер телефона, имя и фотографии через формы этого сайта не отправляются на сервер сайта.</p>
+      <p>На сайте «Чисто Дома» нет формы заявки, регистрации и загрузки фотографий. Номер телефона, имя и фотографии через формы этого сайта не отправляются на сервер сайта.</p>
 
       <h2>2. Обращения через сторонние сервисы</h2>
       <p>На сайте есть ссылки на ВКонтакте, Авито и MAX. При переходе и обращении через эти сервисы данные обрабатываются соответствующими операторами по их собственным правилам и политиками конфиденциальности.</p>
@@ -86,7 +91,7 @@ footer{position:relative;z-index:1;padding:24px 0;color:#8ea4c6;font-size:12px;b
       <p>Сайт сохраняет ваш выбор об аналитике в localStorage браузера. При отказе Яндекс.Метрика не загружается. При согласии она может устанавливать cookie и сохранять идентификаторы в localStorage. Если вы отзовёте согласие, страница перезагрузится; ранее установленные cookie Метрики можно удалить в настройках браузера. <a href="https://yandex.ru/support/metrica/ru/general/cookie-usage">Подробнее о cookie Метрики</a>.</p>
 
       <h2>6. Контакты</h2>
-      <p>По вопросам работы сайта и обработки обращений свяжитесь с Константином: <a href="tel:+79120883029">+7 912 088-30-29</a>.</p>
+      <p>По вопросам работы сайта и обработки обращений свяжитесь с Григоровым Константином Владимировичем: <a href="tel:+79120883029">+7 912 088-30-29</a>.</p>
 
       </article>
   </div>
