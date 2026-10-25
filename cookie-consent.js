@@ -16,7 +16,7 @@
     document.head.appendChild(tag);
   };
   if (read() === "accepted") loadAnalytics();
-  const cookieArt = '<svg class="cookie-consent__art" viewBox="0 0 88 88" fill="none" aria-hidden="true"><circle cx="44" cy="44" r="41" fill="#E9B979"/><path d="M82 30a16 16 0 0 1-21-20A41 41 0 0 0 14 67a41 41 0 0 0 68-37Z" fill="#D89A5B"/><circle cx="30" cy="25" r="5" fill="#815038"/><circle cx="52" cy="38" r="6" fill="#815038"/><circle cx="31" cy="54" r="7" fill="#815038"/><circle cx="57" cy="64" r="4" fill="#815038"/><circle cx="65" cy="21" r="3" fill="#815038"/><path d="M17 68c13 14 36 19 54 4" stroke="#A86E42" stroke-width="3" stroke-linecap="round"/></svg>';
+  const cookieArt = '<img class="cookie-consent__art" src="/cookie-illustration.webp?v=2" width="88" height="88" alt="" aria-hidden="true">';
   const panel = document.createElement("section");
   panel.className = "cookie-consent";
   panel.dataset.theme = theme;
