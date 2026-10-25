@@ -24,7 +24,7 @@
   panel.setAttribute("aria-labelledby", "cookie-consent-title");
   panel.hidden = true;
   panel.innerHTML = '<div class="cookie-consent__illustration">' + cookieArt + '</div><div class="cookie-consent__content"><strong id="cookie-consent-title">Немного о cookie</strong><p>Мы используем Яндекс.Метрику для статистики посещений. Она устанавливает cookie и получает данные о действиях на сайте только после вашего согласия. <a href="/privacy.html">Подробнее в политике</a>.</p><div class="cookie-consent__actions"><button type="button" data-cookie-choice="accepted">Разрешить аналитику</button><button type="button" data-cookie-choice="rejected">Без аналитики</button></div></div>';
-  document.body.appendChild(panel);
+  document.body.prepend(panel);
   const open = () => { panel.hidden = false; };
   const close = () => { panel.hidden = true; };
   panel.addEventListener("click", event => {
